@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Tool Shop | Mezuka MD V5</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"></noscript>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#dc2626;--red-d:#991b1b;--red-b:#7f1d1d;--red-l:#ef4444;--red-xl:#fca5a5;
+  --crimson:#b91c1c;--blood:#450a0a;
+  --black:#0a0a0a;--black2:#111111;--black3:#1a1a1a;--black4:#242424;--black5:#2e2e2e;
+  --white:#f5f5f5;--gray:#888888;--gray-l:#555555;--gray-d:#333333;
+  --green:#22c55e;
+  --card-s:0 4px 24px rgba(220,38,38,0.10);--card-sh:0 12px 40px rgba(220,38,38,0.22);
+}
+html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
+body{font-family:'Inter',sans-serif;background:var(--black);color:var(--white);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 60% 50% at 15% 0%,rgba(185,28,28,0.09) 0%,transparent 60%),
+  radial-gradient(ellipse 50% 60% at 85% 100%,rgba(220,38,38,0.06) 0%,transparent 55%),
+  radial-gradient(ellipse 40% 40% at 50% 50%,rgba(69,10,10,0.15) 0%,transparent 70%),
+  url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23dc2626' fill-opacity='0.018'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/svg%3E");}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:rgba(10,10,10,0.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(220,38,38,0.18);padding:0 16px;height:56px;display:flex;align-items:center;justify-content:space-between;gap:8px;box-shadow:0 2px 20px rgba(0,0,0,0.6);}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logo-img{width:28px;height:28px;border-radius:8px;overflow:hidden;border:1.5px solid rgba(220,38,38,0.35);box-shadow:0 4px 12px rgba(220,38,38,0.25);flex-shrink:0;}
+.nav-logo-img img{width:100%;height:100%;object-fit:cover}
+.nav-brand{font-size:13px;font-weight:800;color:var(--white);letter-spacing:-0.3px;font-family:'Cinzel',serif}
+.nav-brand span{background:linear-gradient(135deg,var(--red-l),var(--red));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.tb-menu-btn{width:32px;height:32px;border-radius:9px;background:rgba(220,38,38,0.07);border:1px solid rgba(220,38,38,0.18);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;cursor:pointer;transition:background 0.18s,transform 0.15s;flex-shrink:0;touch-action:manipulation;-webkit-tap-highlight-color:transparent;margin-right:2px;}
+.tb-menu-btn:hover{background:rgba(220,38,38,0.15)}
+.tb-menu-btn:active{transform:scale(0.93)}
+.tb-menu-btn span{display:block;width:14px;height:1.5px;background:var(--red-l);border-radius:2px}
+.nav-profile{width:32px;height:32px;border-radius:9px;background:rgba(220,38,38,0.08);border:1px solid rgba(220,38,38,0.22);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.18s;flex-shrink:0;overflow:hidden;}
+.nav-profile:hover{background:rgba(220,38,38,0.18);transform:translateY(-1px)}
+.nav-profile i{width:16px;height:16px;color:var(--red-l)}
+.nav-profile img{width:100%;height:100%;object-fit:cover;border-radius:8px}
+.nav-center{flex:1;display:flex;justify-content:center;}
+.nav-title{font-size:12px;font-weight:700;color:var(--gray);font-family:'JetBrains Mono',monospace;letter-spacing:0.5px;}
+
+/* ── OVERLAY / SIDE MENU ── */
+.overlay{position:fixed;inset:0;z-index:90;background:rgba(0,0,0,0);pointer-events:none;transition:background 0.3s ease;will-change:background}
+.overlay.open{background:rgba(0,0,0,0.6);pointer-events:auto;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+.side-menu{position:fixed;top:0;left:0;bottom:0;z-index:110;width:280px;background:rgba(17,17,17,0.98);backdrop-filter:blur(32px) saturate(180%);-webkit-backdrop-filter:blur(32px) saturate(180%);border-right:1px solid rgba(220,38,38,0.18);box-shadow:8px 0 48px rgba(0,0,0,0.6);transform:translate3d(-100%,0,0);transition:transform 0.32s cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column;overflow:hidden;will-change:transform;}
+.side-menu.open{transform:translate3d(0,0,0)}
+.sm-head{padding:32px 22px 20px;border-bottom:1px solid rgba(220,38,38,0.12);display:flex;align-items:center;gap:14px;position:relative}
+.sm-logo{width:44px;height:44px;border-radius:12px;overflow:hidden;border:1px solid rgba(220,38,38,0.3);box-shadow:0 6px 20px rgba(220,38,38,0.2);flex-shrink:0}
+.sm-logo img{width:100%;height:100%;object-fit:cover}
+.sm-brand{font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;color:var(--red-l);margin-bottom:2px}
+.sm-title{font-size:16px;font-weight:700;letter-spacing:-0.3px;color:var(--white);font-family:'Cinzel',serif}
+.sm-close{position:absolute;top:18px;right:18px;width:28px;height:28px;border-radius:50%;background:rgba(220,38,38,0.08);border:1px solid rgba(220,38,38,0.18);color:var(--gray);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.18s}
+.sm-close:hover{background:rgba(220,38,38,0.18);color:var(--white)}
+.sm-nav{padding:16px 14px;flex:1;display:flex;flex-direction:column;gap:3px;overflow-y:auto}
+.sm-btn{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:11px;background:none;border:none;width:100%;color:var(--gray);font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;cursor:pointer;transition:transform 0.18s,color 0.18s,background 0.18s;text-align:left;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.sm-btn:hover{background:rgba(220,38,38,0.08);color:var(--white);transform:translate3d(4px,0,0)}
+.sm-btn.active-page{background:rgba(220,38,38,0.12);color:var(--red-l);border:1px solid rgba(220,38,38,0.22)}
+.sm-btn .sm-ico{width:22px;height:22px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sm-btn .sm-ico i{width:17px;height:17px;color:var(--red-l)}
+.sm-btn:hover .sm-ico i{color:var(--red-xl)}
+.sm-btn.active-page .sm-ico i{color:var(--red-xl)}
+.sm-btn .sm-lbl{flex:1}
+.sm-btn .sm-arr{font-size:11px;color:var(--red-d);opacity:0.6}
+.sm-sep{height:1px;background:rgba(220,38,38,0.1);margin:8px 14px}
+.sm-footer{padding:16px 20px;border-top:1px solid rgba(220,38,38,0.1);text-align:center;font-size:9px;color:var(--gray-l);font-family:'JetBrains Mono',monospace}
+.sm-footer span{color:var(--red-l);font-weight:700}
+
+/* ── PAGE LAYOUT ── */
+.page{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:0 20px 80px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.75)}}
+@keyframes shimmer{0%{background-position:-400px 0}100%{background-position:400px 0}}
+
+/* ── HERO SECTION ── */
+.shop-hero{padding:40px 0 32px;text-align:center;animation:fadeUp 0.5s ease both;}
+.shop-pill{display:inline-flex;align-items:center;gap:8px;padding:5px 14px;margin-bottom:20px;background:rgba(220,38,38,0.08);border:1px solid rgba(220,38,38,0.28);border-radius:100px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--red-l);font-family:'JetBrains Mono',monospace;}
+.shop-pill-dot{width:6px;height:6px;border-radius:50%;background:var(--red);animation:pulse 2s infinite;box-shadow:0 0 8px var(--red)}
+.shop-title{font-size:clamp(28px,5vw,46px);font-weight:900;letter-spacing:-2px;color:var(--white);font-family:'Cinzel',serif;margin-bottom:10px;}
+.shop-title .grad{background:linear-gradient(135deg,var(--red-l),var(--red));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.shop-sub{font-size:14px;color:var(--gray);max-width:500px;margin:0 auto 0;line-height:1.7;}
+
+/* ── BALANCE BAR ── */
+.balance-bar{background:linear-gradient(135deg,rgba(220,38,38,0.12),rgba(127,29,29,0.08));border:1px solid rgba(220,38,38,0.22);border-radius:18px;padding:18px 24px;display:flex;align-items:center;gap:16px;margin:24px 0 28px;flex-wrap:wrap;animation:fadeUp 0.5s ease 0.1s both;position:relative;overflow:hidden;}
+.balance-bar::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(220,38,38,0.5),transparent);}
+.balance-ico{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,var(--red),var(--red-d));display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 6px 20px rgba(220,38,38,0.35);flex-shrink:0;}
+.balance-info{flex:1}
+.balance-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gray);font-family:'JetBrains Mono',monospace;margin-bottom:4px;}
+.balance-amount{font-size:28px;font-weight:900;letter-spacing:-1px;font-family:'JetBrains Mono',monospace;background:linear-gradient(135deg,var(--white),var(--red-xl));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.balance-amount.loading{background:linear-gradient(90deg,var(--black3) 25%,var(--black4) 50%,var(--black3) 75%);background-size:400px 100%;animation:shimmer 1.2s infinite;border-radius:6px;width:120px;height:28px;-webkit-text-fill-color:transparent;}
+.balance-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;}
+.balance-tag{font-size:10px;font-weight:700;padding:4px 12px;border-radius:100px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.25);color:var(--green);font-family:'JetBrains Mono',monospace;display:flex;align-items:center;gap:5px;}
+.balance-tag-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
+.balance-login-prompt{font-size:11px;color:var(--gray);font-family:'JetBrains Mono',monospace;}
+.balance-login-prompt a{color:var(--red-l);text-decoration:none;font-weight:700;}
+
+/* ── TABS ── */
+.tabs-wrap{display:flex;align-items:center;gap:8px;margin-bottom:28px;background:var(--black3);border:1px solid rgba(220,38,38,0.14);border-radius:14px;padding:4px;animation:fadeUp 0.5s ease 0.15s both;}
+.tab-btn{flex:1;padding:10px 16px;border:none;border-radius:11px;background:transparent;color:var(--gray);font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.22s;display:flex;align-items:center;justify-content:center;gap:7px;white-space:nowrap;}
+.tab-btn i{width:15px;height:15px}
+.tab-btn:hover{color:var(--white);background:rgba(220,38,38,0.06);}
+.tab-btn.active{background:rgba(220,38,38,0.12);color:var(--red-l);border:1px solid rgba(220,38,38,0.28);box-shadow:0 3px 14px rgba(220,38,38,0.15);}
+.tab-badge{background:var(--red);color:white;font-size:9px;font-weight:700;padding:2px 6px;border-radius:100px;font-family:'JetBrains Mono',monospace;min-width:18px;text-align:center;}
+
+/* ── SEARCH / FILTER ── */
+.search-wrap{position:relative;margin-bottom:28px;animation:fadeUp 0.5s ease 0.2s both;}
+.search-ico{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--gray);pointer-events:none;}
+.search-inp{width:100%;background:var(--black2);border:1px solid rgba(220,38,38,0.16);border-radius:13px;color:var(--white);font-family:'Inter',sans-serif;font-size:14px;padding:13px 14px 13px 42px;outline:none;transition:all 0.22s;}
+.search-inp::placeholder{color:var(--gray-l)}
+.search-inp:focus{border-color:rgba(220,38,38,0.4);background:var(--black3);box-shadow:0 0 0 3px rgba(220,38,38,0.08);}
+.search-clear{position:absolute;right:12px;top:50%;transform:translateY(-50%);width:26px;height:26px;border-radius:7px;background:rgba(220,38,38,0.08);border:1px solid rgba(220,38,38,0.15);color:var(--gray);cursor:pointer;display:none;align-items:center;justify-content:center;transition:all 0.18s;}
+.search-clear i{width:13px;height:13px;}
+.search-clear.visible{display:flex;}
+.search-clear:hover{background:rgba(220,38,38,0.18);color:var(--white);}
+
+/* ── TOOLS GRID ── */
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;animation:fadeUp 0.5s ease 0.25s both;}
+
+/* ── TOOL CARD ── */
+.tool-card{background:var(--black2);border:1px solid rgba(220,38,38,0.12);border-radius:22px;overflow:hidden;position:relative;transition:all 0.3s cubic-bezier(0.34,1.2,0.64,1);box-shadow:var(--card-s);}
+.tool-card:hover{transform:translateY(-5px);box-shadow:var(--card-sh);border-color:rgba(220,38,38,0.3);}
+.tool-card.owned{border-color:rgba(34,197,94,0.28);}
+.tool-card.owned:hover{border-color:rgba(34,197,94,0.5);box-shadow:0 12px 40px rgba(34,197,94,0.12);}
+.tool-card-top{height:3px;background:linear-gradient(90deg,var(--red-b),var(--red));position:absolute;top:0;left:0;right:0;}
+.tool-card.owned .tool-card-top{background:linear-gradient(90deg,#166534,var(--green));}
+.tool-card-body{padding:24px 22px 22px;}
+.tool-card-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:16px;}
+.tool-ico-wrap{width:52px;height:52px;border-radius:15px;background:rgba(220,38,38,0.08);border:1px solid rgba(220,38,38,0.18);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform 0.22s;}
+.tool-card:hover .tool-ico-wrap{transform:scale(1.08) rotate(3deg)}
+.tool-card.owned .tool-ico-wrap{background:rgba(34,197,94,0.08);border-color:rgba(34,197,94,0.22);}
+.tool-ico-wrap i{width:24px;height:24px;color:var(--red-l)}
+.tool-card.owned .tool-ico-wrap i{color:var(--green)}
+.tool-head-info{flex:1;min-width:0}
+.tool-name{font-size:16px;font-weight:800;color:var(--white);letter-spacing:-0.3px;margin-bottom:3px;line-height:1.2;}
+.tool-caption{font-size:12px;color:var(--gray);line-height:1.5}
+.owned-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.28);border-radius:100px;padding:3px 10px;font-size:9px;font-weight:700;color:var(--green);font-family:'JetBrains Mono',monospace;letter-spacing:1px;margin-top:6px;white-space:nowrap;}
+.owned-badge i{width:10px;height:10px;color:var(--green)}
+.tool-desc{font-size:12.5px;color:var(--gray);line-height:1.65;margin-bottom:16px;}
+.tool-desc-collapsed{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.read-more-btn{background:none;border:none;color:var(--red-l);font-family:'Inter',sans-serif;font-size:11.5px;font-weight:700;cursor:pointer;padding:0;margin-top:4px;display:inline-flex;align-items:center;gap:4px;transition:all 0.18s;}
+.read-more-btn:hover{color:var(--red-xl);}
+.read-more-btn i{width:12px;height:12px;transition:transform 0.2s;}
+.read-more-btn.expanded i{transform:rotate(180deg);}
+.tool-footer{display:flex;align-items:center;gap:12px;border-top:1px solid rgba(220,38,38,0.1);padding-top:16px;flex-wrap:wrap;}
+.tool-card.owned .tool-footer{border-top-color:rgba(34,197,94,0.1);}
+.tool-price{display:flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:16px;color:var(--white);flex:1}
+.tool-price-coin{font-size:20px;line-height:1;}
+.tool-price-label{font-size:9px;color:var(--gray);font-weight:600;text-transform:uppercase;letter-spacing:1px;display:block;margin-top:1px;}
+.btn-buy-tool{padding:10px 20px;border-radius:11px;border:none;background:linear-gradient(135deg,var(--red),var(--red-d));color:white;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.25s cubic-bezier(0.34,1.4,0.64,1);box-shadow:0 4px 16px rgba(220,38,38,0.3);display:inline-flex;align-items:center;gap:7px;white-space:nowrap;flex-shrink:0;}
+.btn-buy-tool i{width:14px;height:14px}
+.btn-buy-tool:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(220,38,38,0.5)}
+.btn-buy-tool:active{transform:scale(0.96)}
+.btn-buy-tool:disabled{opacity:0.45;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn-buy-tool.login-btn{background:rgba(220,38,38,0.08);border:1px solid rgba(220,38,38,0.25);color:var(--red-l);box-shadow:none;}
+.btn-buy-tool.login-btn:hover{background:rgba(220,38,38,0.15);}
+.btn-download{padding:10px 20px;border-radius:11px;border:none;background:linear-gradient(135deg,#166534,#15803d);color:white;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.25s cubic-bezier(0.34,1.4,0.64,1);box-shadow:0 4px 16px rgba(34,197,94,0.25);display:inline-flex;align-items:center;gap:7px;white-space:nowrap;flex-shrink:0;text-decoration:none;}
+.btn-download i{width:14px;height:14px}
+.btn-download:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(34,197,94,0.4)}
+.btn-spin{width:16px;height:16px;border:2px solid rgba(255,255,255,0.25);border-top-color:white;border-radius:50%;animation:spin 0.65s linear infinite;flex-shrink:0;}
+
+/* ── LOADING STATES ── */
+.tools-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:72px 20px;gap:16px;}
+.tools-spinner{width:36px;height:36px;border:3px solid rgba(220,38,38,0.15);border-top-color:var(--red);border-radius:50%;animation:spin 0.7s linear infinite}
+.tools-loading-txt{font-size:14px;color:var(--gray);font-family:'JetBrains Mono',monospace;}
+.tools-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:72px 20px;gap:14px;text-align:center;}
+.tools-empty-ico{width:64px;height:64px;border-radius:18px;background:rgba(220,38,38,0.06);border:1px solid rgba(220,38,38,0.14);display:flex;align-items:center;justify-content:center;margin-bottom:6px;}
+.tools-empty-ico i{width:28px;height:28px;color:var(--red-d)}
+.tools-empty h3{font-size:16px;font-weight:700;color:var(--white);font-family:'Cinzel',serif;}
+.tools-empty p{font-size:13px;color:var(--gray);max-width:280px;line-height:1.6;}
+
+/* ── PURCHASE HISTORY ── */
+.history-list{display:flex;flex-direction:column;gap:12px;animation:fadeUp 0.4s ease both;}
+.history-item{background:var(--black2);border:1px solid rgba(220,38,38,0.12);border-radius:16px;padding:18px 20px;display:flex;align-items:center;gap:14px;transition:all 0.22s;}
+.history-item:hover{border-color:rgba(220,38,38,0.25);box-shadow:var(--card-s);}
+.history-ico{width:44px;height:44px;border-radius:12px;background:rgba(220,38,38,0.07);border:1px solid rgba(220,38,38,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.history-ico i{width:20px;height:20px;color:var(--red-l)}
+.history-info{flex:1;min-width:0}
+.history-name{font-size:14px;font-weight:700;color:var(--white);margin-bottom:3px;}
+.history-date{font-size:10.5px;color:var(--gray);font-family:'JetBrains Mono',monospace;}
+.history-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.22);border-radius:100px;padding:3px 10px;font-size:9px;font-weight:700;color:var(--green);font-family:'JetBrains Mono',monospace;margin-top:4px;}
+.history-badge i{width:10px;height:10px;color:var(--green)}
+.btn-dl-small{padding:8px 14px;border-radius:9px;border:none;background:linear-gradient(135deg,#166534,#15803d);color:white;font-family:'Inter',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.22s;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;text-decoration:none;box-shadow:0 4px 12px rgba(34,197,94,0.2);}
+.btn-dl-small i{width:12px;height:12px}
+.btn-dl-small:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(34,197,94,0.35)}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(90px);z-index:500;background:var(--black2);border:1px solid rgba(220,38,38,0.2);border-radius:14px;padding:12px 22px;font-size:13px;font-weight:600;color:var(--white);backdrop-filter:blur(20px);white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,0.45);transition:transform 0.38s cubic-bezier(0.34,1.4,0.64,1);display:flex;align-items:center;gap:9px;max-width:calc(100vw - 32px);}
+#toast.show{transform:translateX(-50%) translateY(0)}
+#toast.success{border-color:rgba(34,197,94,0.3);background:rgba(17,17,17,0.97);}
+#toast.error{border-color:rgba(220,38,38,0.35);background:rgba(17,17,17,0.97);}
+#toast i{width:16px;height:16px;flex-shrink:0}
+#toast.success i{color:var(--green)}
+#toast.error i{color:var(--red-l)}
+
+/* ── AUTH MODAL ── */
+.modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity 0.28s ease;}
+.modal-overlay.open{opacity:1;pointer-events:auto;}
+.modal{background:var(--black2);border:1px solid rgba(220,38,38,0.22);border-radius:24px;width:100%;max-width:420px;overflow:hidden;transform:translateY(20px) scale(0.96);transition:all 0.3s cubic-bezier(0.34,1.3,0.64,1);box-shadow:0 24px 64px rgba(0,0,0,0.6),0 0 0 1px rgba(220,38,38,0.08);}
+.modal-overlay.open .modal{transform:translateY(0) scale(1);}
+.modal-top{height:3px;background:linear-gradient(90deg,var(--red-b),var(--red),var(--red-d));}
+.modal-head{padding:24px 24px 16px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+.modal-title{font-size:20px;font-weight:800;color:var(--white);font-family:'Cinzel',serif;letter-spacing:-0.3px;}
+.modal-sub{font-size:12px;color:var(--gray);margin-top:3px;}
+.modal-close{width:30px;height:30px;border-radius:50%;background:rgba(220,38,38,0.07);border:1px solid rgba(220,38,38,0.18);color:var(--gray);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.18s;flex-shrink:0;}
+.modal-close:hover{background:rgba(220,38,38,0.18);color:var(--white)}
+.modal-close i{width:13px;height:13px}
+.modal-body{padding:0 24px 24px;display:flex;flex-direction:column;gap:12px;}
+.modal-tabs{display:flex;background:var(--black3);border:1px solid rgba(220,38,38,0.14);border-radius:10px;padding:3px;margin-bottom:4px;}
+.modal-tab{flex:1;padding:8px;border:none;border-radius:8px;background:transparent;color:var(--gray);font-family:'Inter',sans-serif;font-size:12.5px;font-weight:600;cursor:pointer;transition:all 0.2s;}
+.modal-tab.active{background:rgba(220,38,38,0.12);color:var(--red-l);border:1px solid rgba(220,38,38,0.22);}
+.inp-label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gray-l);font-family:'JetBrains Mono',monospace;margin-bottom:4px;}
+.auth-inp{width:100%;background:var(--black3);border:1px solid rgba(220,38,38,0.16);border-radius:11px;color:var(--white);font-family:'Inter',sans-serif;font-size:13px;padding:11px 14px;outline:none;transition:all 0.22s;}
+.auth-inp::placeholder{color:var(--gray-l)}
+.auth-inp:focus{border-color:rgba(220,38,38,0.4);background:var(--black4);box-shadow:0 0 0 3px rgba(220,38,38,0.08);}
+.auth-submit{width:100%;padding:13px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--red),var(--red-d));color:white;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.25s;box-shadow:0 6px 24px rgba(220,38,38,0.35);display:flex;align-items:center;justify-content:center;gap:8px;margin-top:4px;}
+.auth-submit:hover{box-shadow:0 10px 32px rgba(220,38,38,0.5);transform:translateY(-2px)}
+.auth-submit:active{transform:scale(0.97)}
+.auth-submit:disabled{opacity:0.45;cursor:not-allowed;transform:none;box-shadow:none}
+.auth-err{font-size:12px;color:var(--red-l);background:rgba(220,38,38,0.07);border:1px solid rgba(220,38,38,0.18);border-radius:9px;padding:10px 13px;display:none;}
+.auth-err.visible{display:block;}
+.otp-section{display:none;flex-direction:column;gap:12px;}
+.otp-section.visible{display:flex;}
+
+/* ── SKELETON CARDS ── */
+.skeleton-card{background:var(--black2);border:1px solid rgba(220,38,38,0.08);border-radius:22px;overflow:hidden;padding:24px 22px;}
+.skel{background:linear-gradient(90deg,var(--black3) 25%,var(--black4) 50%,var(--black3) 75%);background-size:400px 100%;animation:shimmer 1.3s infinite;border-radius:6px;}
+.skel-ico{width:52px;height:52px;border-radius:15px;}
+.skel-line{height:14px;margin-bottom:8px;}
+.skel-short{width:60%}
+.skel-med{width:80%}
+.skel-full{width:100%}
+.skel-btn{height:38px;border-radius:11px;width:100%;}
+
+/* ── RESULT COUNT ── */
+.result-count{font-size:11px;color:var(--gray-l);font-family:'JetBrains Mono',monospace;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.result-count strong{color:var(--red-l);}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--black)}
+::-webkit-scrollbar-thumb{background:rgba(220,38,38,0.3);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--red)}
+
+/* ── MEDIA QUERIES ── */
+@media(max-width:640px){
+  .tools-grid{grid-template-columns:1fr;}
+  .shop-title{letter-spacing:-1.5px;}
+  .balance-bar{padding:14px 16px;}
+  .balance-amount{font-size:22px;}
+  .modal{border-radius:18px;}
+  .tab-btn{font-size:11.5px;padding:10px 10px;}
+}
+</style>
+</head>
+<body>
+
+<!-- Overlay -->
+<div class="overlay" id="overlay" onclick="closeMenu()"></div>
+
+<!-- Side Menu -->
+<nav class="side-menu" id="sideMenu">
+  <div class="sm-head">
+    <div class="sm-logo"><img src="https://files.catbox.moe/qhrzt2.jpg" alt="logo"></div>
+    <div>
+      <div class="sm-brand">Black Cat Studio</div>
+      <div class="sm-title">Mezuka MD V5</div>
+    </div>
+    <button class="sm-close" onclick="closeMenu()">✕</button>
+  </div>
+  <div class="sm-nav">
+    <button class="sm-btn" onclick="navigate('main.html')"><span class="sm-ico"><i data-lucide="house"></i></span><span class="sm-lbl">Home</span><span class="sm-arr">›</span></button>
+    <button class="sm-btn" onclick="navigate('pair.html')"><span class="sm-ico"><i data-lucide="link"></i></span><span class="sm-lbl">Connect Bot</span><span class="sm-arr">›</span></button>
+    <button class="sm-btn" onclick="navigate('settings.html')"><span class="sm-ico"><i data-lucide="settings-2"></i></span><span class="sm-lbl">Settings</span><span class="sm-arr">›</span></button>
+    <div class="sm-sep"></div>
+    <div style="font-size:9px;font-weight:700;letter-spacing:1px;color:var(--red-l);margin:4px 14px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;">Trading Suite</div>
+    <button class="sm-btn" onclick="navigate('tradings.html')"><span class="sm-ico"><i data-lucide="trending-up"></i></span><span class="sm-lbl">Trading Terminal</span><span class="sm-arr">›</span></button>
+    <button class="sm-btn" onclick="navigate('exchange.html')"><span class="sm-ico"><i data-lucide="arrow-left-right"></i></span><span class="sm-lbl">Exchange</span><span class="sm-arr">›</span></button>
+    <button class="sm-btn active-page" onclick="navigate('toolshop.html')"><span class="sm-ico"><i data-lucide="shopping-bag"></i></span><span class="sm-lbl">Tool Shop</span><span class="sm-arr">›</span></button>
+    <button class="sm-btn" onclick="navigate('profile.html')"><span class="sm-ico"><i data-lucide="user-circle-2"></i></span><span class="sm-lbl">My Profile</span><span class="sm-arr">›</span></button>
+    <div class="sm-sep"></div>
+    <button class="sm-btn" onclick="navigate('react.html')"><span class="sm-ico"><i data-lucide="zap"></i></span><span class="sm-lbl">Auto Reaction</span><span class="sm-arr">›</span></button>
+    <button class="sm-btn" onclick="navigate('shop.html')"><span class="sm-ico"><i data-lucide="coins"></i></span><span class="sm-lbl">Coin Shop</span><span class="sm-arr">›</span></button>
+    <button class="sm-btn" onclick="navigate('team.html')"><span class="sm-ico"><i data-lucide="users"></i></span><span class="sm-lbl">Admin Team</span><span class="sm-arr">›</span></button>
+    <button class="sm-btn" onclick="navigate('contact.html')"><span class="sm-ico"><i data-lucide="mail"></i></span><span class="sm-lbl">Contact Us</span><span class="sm-arr">›</span></button>
+    <button class="sm-btn" onclick="navigate('news.html')"><span class="sm-ico"><i data-lucide="newspaper"></i></span><span class="sm-lbl">Latest News</span><span class="sm-arr">›</span></button>
+  </div>
+  <div class="sm-footer">Powered by <span>Mezuka MD V5</span><br>made by <span>nimeshka mihiran</span></div>
+</nav>
+
+<!-- Nav Bar -->
+<nav class="nav">
+  <div class="nav-logo">
+    <div class="tb-menu-btn" onclick="openMenu()"><span></span><span></span><span></span></div>
+    <div class="nav-logo-img"><img src="https://files.catbox.moe/qhrzt2.jpg" alt="Mezuka"></div>
+    <div class="nav-brand">Mezuka MD <span>V5</span></div>
+  </div>
+  <div class="nav-center">
+    <div class="nav-title">TOOL SHOP</div>
+  </div>
+  <div class="nav-profile" id="navProfile" onclick="handleProfileClick()">
+    <i data-lucide="user"></i>
+  </div>
+</nav>
+
+<!-- Page Content -->
+<div class="page">
+
+  <!-- Hero -->
+  <div class="shop-hero">
+    <div class="shop-pill"><span class="shop-pill-dot"></span>Premium Tools · NENO Powered</div>
+    <h1 class="shop-title">Tool <span class="grad">Shop</span></h1>
+    <p class="shop-sub">Unlock premium scripts, bots, and automation tools. Purchased with 🪙 NENO coins — your platform currency.</p>
+  </div>
+
+  <!-- Balance Bar -->
+  <div class="balance-bar" id="balanceBar">
+    <div class="balance-ico">🪙</div>
+    <div class="balance-info">
+      <div class="balance-label">Your NENO Balance</div>
+      <div class="balance-amount loading" id="balanceAmount">&nbsp;</div>
+    </div>
+    <div class="balance-right" id="balanceRight">
+      <div class="balance-login-prompt">
+        <a href="#" onclick="openAuthModal();return false">Login to see balance</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs-wrap">
+    <button class="tab-btn active" id="tabBrowse" onclick="switchTab('browse')">
+      <i data-lucide="store"></i> Browse Tools
+    </button>
+    <button class="tab-btn" id="tabHistory" onclick="switchTab('history')">
+      <i data-lucide="package-check"></i> My Purchases
+      <span class="tab-badge" id="historyBadge" style="display:none">0</span>
+    </button>
+  </div>
+
+  <!-- Browse Tab -->
+  <div id="browseTab">
+    <!-- Search -->
+    <div class="search-wrap">
+      <i data-lucide="search" class="search-ico"></i>
+      <input type="text" class="search-inp" id="searchInp" placeholder="Search tools by name…" oninput="onSearch(this.value)">
+      <button class="search-clear" id="searchClear" onclick="clearSearch()">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+
+    <!-- Result count -->
+    <div class="result-count" id="resultCount" style="display:none">
+      Showing <strong id="countNum">0</strong> tools
+    </div>
+
+    <!-- Tools Grid -->
+    <div class="tools-grid" id="toolsGrid">
+      <!-- Skeleton cards while loading -->
+      <div class="skeleton-card"><div style="display:flex;gap:14px;margin-bottom:16px"><div class="skel skel-ico"></div><div style="flex:1"><div class="skel skel-line skel-med" style="margin-bottom:10px"></div><div class="skel skel-line skel-short"></div></div></div><div class="skel skel-line skel-full" style="margin-bottom:8px"></div><div class="skel skel-line skel-med" style="margin-bottom:20px"></div><div class="skel skel-btn"></div></div>
+      <div class="skeleton-card"><div style="display:flex;gap:14px;margin-bottom:16px"><div class="skel skel-ico"></div><div style="flex:1"><div class="skel skel-line skel-med" style="margin-bottom:10px"></div><div class="skel skel-line skel-short"></div></div></div><div class="skel skel-line skel-full" style="margin-bottom:8px"></div><div class="skel skel-line skel-med" style="margin-bottom:20px"></div><div class="skel skel-btn"></div></div>
+      <div class="skeleton-card"><div style="display:flex;gap:14px;margin-bottom:16px"><div class="skel skel-ico"></div><div style="flex:1"><div class="skel skel-line skel-med" style="margin-bottom:10px"></div><div class="skel skel-line skel-short"></div></div></div><div class="skel skel-line skel-full" style="margin-bottom:8px"></div><div class="skel skel-line skel-med" style="margin-bottom:20px"></div><div class="skel skel-btn"></div></div>
+    </div>
+  </div>
+
+  <!-- History Tab -->
+  <div id="historyTab" style="display:none;">
+    <div id="historyContent">
+      <div class="tools-loading">
+        <div class="tools-spinner"></div>
+        <div class="tools-loading-txt">Loading your purchases…</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<!-- Toast -->
+<div id="toast">
+  <i data-lucide="check-circle" id="toastIco"></i>
+  <span id="toastMsg">Message</span>
+</div>
+
+<!-- Auth Modal -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal">
+    <div class="modal-top"></div>
+    <div class="modal-head">
+      <div>
+        <div class="modal-title" id="modalTitle">Welcome Back</div>
+        <div class="modal-sub" id="modalSub">Login to buy tools with NENO coins</div>
+      </div>
+      <button class="modal-close" onclick="closeAuthModal()"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-tabs">
+        <button class="modal-tab active" id="loginTabBtn" onclick="switchAuthTab('login')">Login</button>
+        <button class="modal-tab" id="signupTabBtn" onclick="switchAuthTab('signup')">Sign Up</button>
+      </div>
+
+      <!-- Login Form -->
+      <div id="loginForm">
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div>
+            <div class="inp-label">Email</div>
+            <input class="auth-inp" type="email" id="loginEmail" placeholder="your@email.com" autocomplete="email">
+          </div>
+          <div>
+            <div class="inp-label">Password</div>
+            <input class="auth-inp" type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+          </div>
+          <div class="auth-err" id="loginErr"></div>
+          <button class="auth-submit" id="loginBtn" onclick="doLogin()">
+            <i data-lucide="log-in"></i> Login
+          </button>
+        </div>
+      </div>
+
+      <!-- Signup Form -->
+      <div id="signupForm" style="display:none;">
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div>
+            <div class="inp-label">Username</div>
+            <input class="auth-inp" type="text" id="signupUser" placeholder="YourName" autocomplete="username">
+          </div>
+          <div>
+            <div class="inp-label">Email</div>
+            <input class="auth-inp" type="email" id="signupEmail" placeholder="your@email.com" autocomplete="email">
+          </div>
+          <div>
+            <div class="inp-label">WhatsApp</div>
+            <input class="auth-inp" type="tel" id="signupWa" placeholder="+94721234567">
+          </div>
+          <div>
+            <div class="inp-label">Password</div>
+            <input class="auth-inp" type="password" id="signupPass" placeholder="••••••••" autocomplete="new-password">
+          </div>
+          <div class="auth-err" id="signupErr"></div>
+          <button class="auth-submit" id="signupBtn" onclick="doSignup()">
+            <i data-lucide="user-plus"></i> Create Account
+          </button>
+        </div>
+      </div>
+
+      <!-- OTP Form -->
+      <div class="otp-section" id="otpSection">
+        <div class="inp-label">Enter OTP sent to your email</div>
+        <input class="auth-inp" type="text" id="otpInp" placeholder="6-digit code" maxlength="6" oninput="this.value=this.value.replace(/\D/g,'')" onkeydown="if(event.key==='Enter')doVerifyOtp()">
+        <div class="auth-err" id="otpErr"></div>
+        <button class="auth-submit" id="otpBtn" onclick="doVerifyOtp()">
+          <i data-lucide="shield-check"></i> Verify OTP
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CONFIG ──
+const IMG_URL = 'https://files.catbox.moe/qhrzt2.jpg';
+
+// ── STATE ──
+let allTools = [];
+let purchasedIds = new Set();
+let currentTab = 'browse';
+let searchQuery = '';
+let menuOpen = false;
+let token = localStorage.getItem('trading_token');
+let user = (() => { try { return JSON.parse(localStorage.getItem('trading_user') || 'null'); } catch { return null; } })();
+let signupPendingEmail = '';
+let toastTimeout = null;
+
+// ── MENU ──
+function openMenu() {
+  menuOpen = true;
+  document.getElementById('sideMenu').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeMenu() {
+  menuOpen = false;
+  document.getElementById('sideMenu').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function navigate(page) { closeMenu(); setTimeout(() => window.location.href = page, 180); }
+
+// ── NAV PROFILE ──
+function handleProfileClick() {
+  if (token) navigate('profile.html');
+  else openAuthModal();
+}
+
+// ── TOAST ──
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  const ico = document.getElementById('toastIco');
+  document.getElementById('toastMsg').textContent = msg;
+  t.className = `show ${type}`;
+  ico.setAttribute('data-lucide', type === 'success' ? 'check-circle' : 'x-circle');
+  lucide.createIcons();
+  if (toastTimeout) clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => { t.className = ''; }, 3200);
+}
+
+// ── TAB SWITCH ──
+function switchTab(tab) {
+  currentTab = tab;
+  document.getElementById('tabBrowse').className = tab === 'browse' ? 'tab-btn active' : 'tab-btn';
+  document.getElementById('tabHistory').className = tab === 'history' ? 'tab-btn active' : 'tab-btn';
+  document.getElementById('browseTab').style.display = tab === 'browse' ? '' : 'none';
+  document.getElementById('historyTab').style.display = tab === 'history' ? '' : 'none';
+  if (tab === 'history') loadHistory();
+}
+
+// ── SEARCH ──
+function onSearch(val) {
+  searchQuery = val.toLowerCase();
+  document.getElementById('searchClear').className = val ? 'search-clear visible' : 'search-clear';
+  renderTools();
+}
+function clearSearch() {
+  document.getElementById('searchInp').value = '';
+  onSearch('');
+}
+
+// ── ICON PICKER ──
+const iconMap = {
+  bot: 'bot', script: 'code-2', automation: 'zap', download: 'download',
+  media: 'video', image: 'image', sticker: 'sticker', anti: 'shield-off',
+  group: 'users', admin: 'crown', spam: 'ban', reaction: 'smile-plus',
+  reply: 'message-circle-reply', schedule: 'calendar-clock', news: 'newspaper',
+  channel: 'radio', premium: 'star', pro: 'award', hack: 'terminal',
+  auto: 'refresh-cw', bulk: 'layers', report: 'bar-chart-2', ai: 'brain-circuit',
+  chat: 'message-square', link: 'link', qr: 'qr-code', voice: 'mic',
+  video: 'video', text: 'type', filter: 'filter', track: 'map-pin',
+  alert: 'bell', notify: 'bell-ring', save: 'save', backup: 'database',
+  export: 'file-down', import: 'file-up', clean: 'trash-2', block: 'shield',
+  forward: 'forward', broadcast: 'megaphone', game: 'gamepad-2', music: 'music',
+  whatsapp: 'message-circle', tool: 'wrench', plugin: 'plug', pack: 'package'
+};
+
+function getToolIcon(name) {
+  const n = (name || '').toLowerCase();
+  for (const [key, ico] of Object.entries(iconMap)) {
+    if (n.includes(key)) return ico;
+  }
+  return 'package';
+}
+
+// ── BALANCE ──
+async function loadBalance() {
+  const amtEl = document.getElementById('balanceAmount');
+  const rightEl = document.getElementById('balanceRight');
+
+  if (!token) {
+    amtEl.textContent = '—';
+    amtEl.className = 'balance-amount';
+    rightEl.innerHTML = `<div class="balance-login-prompt"><a href="#" onclick="openAuthModal();return false">Login to see balance</a></div>`;
+    return;
+  }
+  try {
+    amtEl.className = 'balance-amount loading';
+    amtEl.innerHTML = '&nbsp;';
+    const r = await fetch('/api/trading/profile', { headers: { Authorization: 'Bearer ' + token } });
+    const data = await r.json();
+    if (data.ok) {
+      const neno = data.user?.coins?.NENO ?? data.user?.NENO ?? 0;
+      amtEl.textContent = Number(neno).toLocaleString() + ' NENO';
+      amtEl.className = 'balance-amount';
+      rightEl.innerHTML = `<div class="balance-tag"><span class="balance-tag-dot"></span>Live Balance</div>`;
+      // update cached user
+      user = data.user;
+      localStorage.setItem('trading_user', JSON.stringify(user));
+      updateNavProfile();
+    } else {
+      handleAuthExpired();
+    }
+  } catch {
+    amtEl.textContent = 'Error';
+    amtEl.className = 'balance-amount';
+    rightEl.innerHTML = '';
+  }
+}
+
+function updateNavProfile() {
+  const np = document.getElementById('navProfile');
+  if (user && user.profileImage) {
+    np.innerHTML = `<img src="${user.profileImage}" alt="profile">`;
+  } else if (user) {
+    np.innerHTML = `<i data-lucide="user-check"></i>`;
+    lucide.createIcons();
+  }
+}
+
+function handleAuthExpired() {
+  token = null; user = null;
+  localStorage.removeItem('trading_token');
+  localStorage.removeItem('trading_user');
+  loadBalance();
+}
+
+// ── LOAD TOOLS ──
+async function loadTools() {
+  try {
+    const [toolsRes, purchasedRes] = await Promise.all([
+      fetch('/api/trading/tools'),
+      token ? fetch('/api/trading/tools/purchased', { headers: { Authorization: 'Bearer ' + token } }) : Promise.resolve(null)
+    ]);
+
+    const toolsData = await toolsRes.json();
+    if (!toolsData.ok) throw new Error('Failed to load tools');
+    allTools = toolsData.tools || [];
+
+    if (purchasedRes) {
+      const purchasedData = await purchasedRes.json();
+      if (purchasedData.ok) {
+        purchasedIds = new Set((purchasedData.purchases || []).map(p => p.toolId || p.id || p._id));
+        const badge = document.getElementById('historyBadge');
+        badge.textContent = purchasedIds.size;
+        badge.style.display = purchasedIds.size > 0 ? 'inline-flex' : 'none';
+      }
+    }
+
+    renderTools();
+  } catch (e) {
+    document.getElementById('toolsGrid').innerHTML = `
+      <div class="tools-empty" style="grid-column:1/-1">
+        <div class="tools-empty-ico"><i data-lucide="wifi-off"></i></div>
+        <h3>Connection Error</h3>
+        <p>Could not load tools. Please check your connection and try again.</p>
+      </div>`;
+    lucide.createIcons();
+  }
+}
+
+// ── RENDER TOOLS ──
+function renderTools() {
+  const grid = document.getElementById('toolsGrid');
+  const countWrap = document.getElementById('resultCount');
+  const countNum = document.getElementById('countNum');
+
+  let filtered = allTools;
+  if (searchQuery) {
+    filtered = allTools.filter(t => (t.name || '').toLowerCase().includes(searchQuery) || (t.caption || t.shortCaption || '').toLowerCase().includes(searchQuery));
+  }
+
+  countWrap.style.display = allTools.length > 0 ? 'flex' : 'none';
+  countNum.textContent = filtered.length;
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `
+      <div class="tools-empty" style="grid-column:1/-1">
+        <div class="tools-empty-ico"><i data-lucide="${searchQuery ? 'search-x' : 'package-open'}"></i></div>
+        <h3>${searchQuery ? 'No Results' : 'No Tools Yet'}</h3>
+        <p>${searchQuery ? `No tools matching "${searchQuery}" found. Try a different keyword.` : 'No tools are available right now. Check back soon!'}</p>
+      </div>`;
+    lucide.createIcons();
+    return;
+  }
+
+  grid.innerHTML = filtered.map(tool => buildToolCard(tool)).join('');
+  lucide.createIcons();
+}
+
+function buildToolCard(tool) {
+  const id = tool._id || tool.id;
+  const isOwned = purchasedIds.has(id) || purchasedIds.has(String(id));
+  const iconName = getToolIcon(tool.name);
+  const price = tool.price ?? tool.cost ?? 0;
+  const name = tool.name || 'Unnamed Tool';
+  const shortCaption = tool.caption || tool.shortCaption || tool.subtitle || '';
+  const longCaption = tool.description || tool.longCaption || tool.desc || '';
+  const dlLink = tool.dlLink || tool.downloadLink || tool.download_link || '';
+
+  return `
+  <div class="tool-card ${isOwned ? 'owned' : ''}" id="card-${id}">
+    <div class="tool-card-top"></div>
+    <div class="tool-card-body">
+      <div class="tool-card-head">
+        <div class="tool-ico-wrap"><i data-lucide="${iconName}"></i></div>
+        <div class="tool-head-info">
+          <div class="tool-name">${escHtml(name)}</div>
+          <div class="tool-caption">${escHtml(shortCaption)}</div>
+          ${isOwned ? `<span class="owned-badge"><i data-lucide="check-circle-2"></i>OWNED</span>` : ''}
+        </div>
+      </div>
+      ${longCaption ? `
+        <div class="tool-desc tool-desc-collapsed" id="desc-${id}">${escHtml(longCaption)}</div>
+        <button class="read-more-btn" id="rmb-${id}" onclick="toggleReadMore('${id}')">
+          <span id="rmb-txt-${id}">Read More</span><i data-lucide="chevron-down"></i>
+        </button>
+      ` : ''}
+      <div class="tool-footer">
+        <div class="tool-price">
+          <span class="tool-price-coin">🪙</span>
+          <div>
+            <span>${Number(price).toLocaleString()}</span>
+            <span class="tool-price-label">NENO</span>
+          </div>
+        </div>
+        ${buildActionBtn(tool, id, isOwned, dlLink)}
+      </div>
+    </div>
+  </div>`;
+}
+
+function buildActionBtn(tool, id, isOwned, dlLink) {
+  if (isOwned) {
+    if (dlLink) {
+      return `<a class="btn-download" href="${escHtml(dlLink)}" target="_blank" rel="noopener"><i data-lucide="download"></i> Download</a>`;
+    }
+    return `<button class="btn-buy-tool" onclick="redownload('${id}')" id="btn-${id}"><i data-lucide="download"></i> Get Link</button>`;
+  }
+  if (!token) {
+    return `<button class="btn-buy-tool login-btn" onclick="openAuthModal()"><i data-lucide="log-in"></i> Login to Buy</button>`;
+  }
+  return `<button class="btn-buy-tool" onclick="buyTool('${id}')" id="btn-${id}"><i data-lucide="shopping-bag"></i> Buy Now</button>`;
+}
+
+function toggleReadMore(id) {
+  const desc = document.getElementById('desc-' + id);
+  const btn = document.getElementById('rmb-' + id);
+  const txt = document.getElementById('rmb-txt-' + id);
+  const isCollapsed = desc.classList.contains('tool-desc-collapsed');
+  desc.classList.toggle('tool-desc-collapsed', !isCollapsed);
+  btn.classList.toggle('expanded', isCollapsed);
+  txt.textContent = isCollapsed ? 'Read Less' : 'Read More';
+  lucide.createIcons();
+}
+
+// ── BUY TOOL ──
+async function buyTool(id) {
+  if (!token) { openAuthModal(); return; }
+  const btn = document.getElementById('btn-' + id);
+  if (!btn || btn.disabled) return;
+
+  btn.disabled = true;
+  btn.innerHTML = `<span class="btn-spin"></span> Buying…`;
+
+  try {
+    const r = await fetch(`/api/trading/tools/buy/${id}`, {
+      method: 'POST',
+      headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' }
+    });
+    const data = await r.json();
+
+    if (data.ok) {
+      purchasedIds.add(id);
+      showToast('Purchase successful! 🎉', 'success');
+      // Update card to owned state
+      const card = document.getElementById('card-' + id);
+      if (card) {
+        card.classList.add('owned');
+        card.querySelector('.tool-card-top').style.background = 'linear-gradient(90deg,#166534,#22c55e)';
+        const headInfo = card.querySelector('.tool-head-info');
+        if (!headInfo.querySelector('.owned-badge')) {
+          headInfo.insertAdjacentHTML('beforeend', `<span class="owned-badge"><i data-lucide="check-circle-2"></i>OWNED</span>`);
+        }
+        const icoWrap = card.querySelector('.tool-ico-wrap');
+        icoWrap.style.background = 'rgba(34,197,94,0.08)';
+        icoWrap.style.borderColor = 'rgba(34,197,94,0.22)';
+        icoWrap.querySelector('i').style.color = 'var(--green)';
+
+        if (data.dlLink) {
+          btn.outerHTML = `<a class="btn-download" href="${escHtml(data.dlLink)}" target="_blank" rel="noopener"><i data-lucide="download"></i> Download</a>`;
+        } else {
+          btn.innerHTML = `<i data-lucide="download"></i> Get Link`;
+          btn.disabled = false;
+          btn.onclick = () => redownload(id);
+        }
+        // Update footer border
+        card.querySelector('.tool-footer').style.borderTopColor = 'rgba(34,197,94,0.1)';
+        lucide.createIcons();
+      }
+      // Update badge count
+      const badge = document.getElementById('historyBadge');
+      badge.textContent = purchasedIds.size;
+      badge.style.display = 'inline-flex';
+      // Refresh balance
+      loadBalance();
+    } else {
+      btn.disabled = false;
+      btn.innerHTML = `<i data-lucide="shopping-bag"></i> Buy Now`;
+      lucide.createIcons();
+      showToast(data.message || 'Purchase failed. Insufficient NENO?', 'error');
+    }
+  } catch {
+    btn.disabled = false;
+    btn.innerHTML = `<i data-lucide="shopping-bag"></i> Buy Now`;
+    lucide.createIcons();
+    showToast('Network error. Please try again.', 'error');
+  }
+}
+
+// ── RE-DOWNLOAD (already owned) ──
+async function redownload(id) {
+  if (!token) { openAuthModal(); return; }
+  const btn = document.getElementById('btn-' + id);
+  if (btn) { btn.disabled = true; btn.innerHTML = `<span class="btn-spin"></span> Loading…`; }
+
+  try {
+    const r = await fetch(`/api/trading/tools/buy/${id}`, {
+      method: 'POST',
+      headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' }
+    });
+    const data = await r.json();
+    if (data.ok && data.dlLink) {
+      window.open(data.dlLink, '_blank');
+      showToast('Download link opened!', 'success');
+    } else {
+      showToast(data.message || 'Could not get download link.', 'error');
+    }
+  } catch {
+    showToast('Network error.', 'error');
+  } finally {
+    if (btn) { btn.disabled = false; btn.innerHTML = `<i data-lucide="download"></i> Get Link`; lucide.createIcons(); }
+  }
+}
+
+// ── LOAD HISTORY ──
+async function loadHistory() {
+  const content = document.getElementById('historyContent');
+  content.innerHTML = `<div class="tools-loading"><div class="tools-spinner"></div><div class="tools-loading-txt">Loading your purchases…</div></div>`;
+
+  if (!token) {
+    content.innerHTML = `
+      <div class="tools-empty">
+        <div class="tools-empty-ico"><i data-lucide="lock-keyhole"></i></div>
+        <h3>Login Required</h3>
+        <p>Please login to view your purchased tools and download history.</p>
+        <button class="btn-buy-tool" style="margin-top:12px" onclick="openAuthModal()"><i data-lucide="log-in"></i> Login Now</button>
+      </div>`;
+    lucide.createIcons();
+    return;
+  }
+
+  try {
+    const r = await fetch('/api/trading/tools/purchased', { headers: { Authorization: 'Bearer ' + token } });
+    const data = await r.json();
+
+    if (!data.ok) { handleAuthExpired(); return; }
+    const purchases = data.purchases || [];
+
+    if (purchases.length === 0) {
+      content.innerHTML = `
+        <div class="tools-empty">
+          <div class="tools-empty-ico"><i data-lucide="package-open"></i></div>
+          <h3>No Purchases Yet</h3>
+          <p>You haven't bought any tools yet. Browse the shop and get started!</p>
+          <button class="btn-buy-tool" style="margin-top:12px" onclick="switchTab('browse')"><i data-lucide="store"></i> Browse Tools</button>
+        </div>`;
+      lucide.createIcons();
+      return;
+    }
+
+    content.innerHTML = `<div class="history-list">${purchases.map(p => buildHistoryItem(p)).join('')}</div>`;
+    lucide.createIcons();
+  } catch {
+    content.innerHTML = `
+      <div class="tools-empty">
+        <div class="tools-empty-ico"><i data-lucide="wifi-off"></i></div>
+        <h3>Error Loading</h3>
+        <p>Could not load your purchase history. Please try again.</p>
+      </div>`;
+    lucide.createIcons();
+  }
+}
+
+function buildHistoryItem(p) {
+  const name = p.toolName || p.name || 'Tool';
+  const date = p.purchasedAt || p.date || p.createdAt;
+  const dateStr = date ? new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'Unknown date';
+  const dlLink = p.dlLink || p.downloadLink || p.download_link || '';
+  const iconName = getToolIcon(name);
+  const price = p.price ?? p.amount ?? 0;
+
+  return `
+  <div class="history-item">
+    <div class="history-ico"><i data-lucide="${iconName}"></i></div>
+    <div class="history-info">
+      <div class="history-name">${escHtml(name)}</div>
+      <div class="history-date">${escHtml(dateStr)} · 🪙 ${Number(price).toLocaleString()} NENO</div>
+      <span class="history-badge"><i data-lucide="check-circle-2"></i>OWNED</span>
+    </div>
+    ${dlLink ? `<a class="btn-dl-small" href="${escHtml(dlLink)}" target="_blank" rel="noopener"><i data-lucide="download"></i> Download</a>` : ''}
+  </div>`;
+}
+
+// ── AUTH MODAL ──
+function openAuthModal() {
+  document.getElementById('authModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeAuthModal() {
+  document.getElementById('authModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('authModal').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('authModal')) closeAuthModal();
+});
+
+function switchAuthTab(tab) {
+  document.getElementById('loginTabBtn').className = tab === 'login' ? 'modal-tab active' : 'modal-tab';
+  document.getElementById('signupTabBtn').className = tab === 'signup' ? 'modal-tab active' : 'modal-tab';
+  document.getElementById('loginForm').style.display = tab === 'login' ? '' : 'none';
+  document.getElementById('signupForm').style.display = tab === 'signup' ? '' : 'none';
+  document.getElementById('otpSection').className = 'otp-section';
+  document.getElementById('modalTitle').textContent = tab === 'login' ? 'Welcome Back' : 'Create Account';
+  document.getElementById('modalSub').textContent = tab === 'login' ? 'Login to buy tools with NENO coins' : 'Join to start buying premium tools';
+}
+
+function showAuthErr(formId, msg) {
+  const el = document.getElementById(formId + 'Err');
+  el.textContent = msg;
+  el.className = 'auth-err visible';
+}
+function clearAuthErr(formId) {
+  const el = document.getElementById(formId + 'Err');
+  if (el) { el.className = 'auth-err'; }
+}
+
+async function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass = document.getElementById('loginPass').value;
+  clearAuthErr('login');
+  if (!email || !pass) { showAuthErr('login', 'Please fill in all fields.'); return; }
+
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true; btn.innerHTML = `<span class="btn-spin" style="border-top-color:white"></span> Logging in…`;
+
+  try {
+    const r = await fetch('/api/trading/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password: pass })
+    });
+    const data = await r.json();
+    if (data.ok) {
+      token = data.token; user = data.user;
+      localStorage.setItem('trading_token', token);
+      localStorage.setItem('trading_user', JSON.stringify(user));
+      closeAuthModal();
+      showToast('Logged in successfully!', 'success');
+      updateNavProfile();
+      loadBalance();
+      loadTools();
+    } else {
+      showAuthErr('login', data.message || 'Login failed.');
+    }
+  } catch {
+    showAuthErr('login', 'Network error. Please try again.');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = `<i data-lucide="log-in"></i> Login`;
+    lucide.createIcons();
+  }
+}
+
+async function doSignup() {
+  const username = document.getElementById('signupUser').value.trim();
+  const email = document.getElementById('signupEmail').value.trim();
+  const whatsapp = document.getElementById('signupWa').value.trim();
+  const password = document.getElementById('signupPass').value;
+  clearAuthErr('signup');
+
+  if (!username || !email || !password) { showAuthErr('signup', 'Please fill in all required fields.'); return; }
+
+  const btn = document.getElementById('signupBtn');
+  btn.disabled = true; btn.innerHTML = `<span class="btn-spin" style="border-top-color:white"></span> Creating account…`;
+
+  try {
+    const r = await fetch('/api/trading/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, email, password, whatsapp })
+    });
+    const data = await r.json();
+    if (data.ok) {
+      signupPendingEmail = email;
+      document.getElementById('signupForm').style.display = 'none';
+      document.getElementById('otpSection').className = 'otp-section visible';
+      document.getElementById('modalTitle').textContent = 'Verify Email';
+      document.getElementById('modalSub').textContent = `Enter the OTP sent to ${email}`;
+      showToast('Check your email for the OTP code!', 'success');
+    } else {
+      showAuthErr('signup', data.message || 'Signup failed.');
+    }
+  } catch {
+    showAuthErr('signup', 'Network error. Please try again.');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = `<i data-lucide="user-plus"></i> Create Account`;
+    lucide.createIcons();
+  }
+}
+
+async function doVerifyOtp() {
+  const otp = document.getElementById('otpInp').value.trim();
+  if (!otp || otp.length < 4) { showAuthErr('otp', 'Enter a valid OTP.'); return; }
+
+  const btn = document.getElementById('otpBtn');
+  btn.disabled = true; btn.innerHTML = `<span class="btn-spin" style="border-top-color:white"></span> Verifying…`;
+
+  try {
+    const r = await fetch('/api/trading/verify-otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: signupPendingEmail, otp })
+    });
+    const data = await r.json();
+    if (data.ok) {
+      token = data.token; user = data.user;
+      localStorage.setItem('trading_token', token);
+      localStorage.setItem('trading_user', JSON.stringify(user));
+      closeAuthModal();
+      showToast('Account verified! Welcome! 🎉', 'success');
+      updateNavProfile();
+      loadBalance();
+      loadTools();
+    } else {
+      showAuthErr('otp', data.message || 'Invalid OTP.');
+    }
+  } catch {
+    showAuthErr('otp', 'Network error. Please try again.');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = `<i data-lucide="shield-check"></i> Verify OTP`;
+    lucide.createIcons();
+  }
+}
+
+// ── ESCAPE HTML ──
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── INIT ──
+window.addEventListener('DOMContentLoaded', () => {
+  lucide.createIcons();
+  if (user) updateNavProfile();
+  loadBalance();
+  loadTools();
+});
+
+// Dynamically load centralized images if image.js exists
+const imgScript = document.createElement('script');
+imgScript.src = '/image.js';
+imgScript.onerror = () => {};
+document.head.appendChild(imgScript);
+</script>
+</body>
+</html>

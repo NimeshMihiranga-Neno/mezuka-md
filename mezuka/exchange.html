@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mezuka MD V5 | Coin Exchange</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"></noscript>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#dc2626;--red-d:#991b1b;--red-b:#7f1d1d;--red-l:#ef4444;--red-xl:#fca5a5;
+  --crimson:#b91c1c;--blood:#450a0a;
+  --black:#0a0a0a;--black2:#111111;--black3:#1a1a1a;--black4:#242424;--black5:#2e2e2e;
+  --white:#f5f5f5;--gray:#888888;--gray-l:#555555;--gray-d:#333333;
+  --green:#22c55e;--green-d:#16a34a;
+  --card-s:0 4px 24px rgba(220,38,38,0.10);--card-sh:0 12px 40px rgba(220,38,38,0.22);
+}
+html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
+body{font-family:'Inter',sans-serif;background:var(--black);color:var(--white);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 60% 50% at 15% 0%,rgba(185,28,28,0.09) 0%,transparent 60%),
+  radial-gradient(ellipse 50% 60% at 85% 100%,rgba(220,38,38,0.06) 0%,transparent 55%),
+  radial-gradient(ellipse 40% 40% at 50% 50%,rgba(69,10,10,0.15) 0%,transparent 70%),
+  url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23dc2626' fill-opacity='0.018'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/svg%3E");}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:rgba(10,10,10,0.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(220,38,38,0.18);padding:0 16px;height:56px;display:flex;align-items:center;justify-content:space-between;gap:8px;box-shadow:0 2px 20px rgba(0,0,0,0.6);}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logo-img{width:28px;height:28px;border-radius:8px;overflow:hidden;border:1.5px solid rgba(220,38,38,0.35);box-shadow:0 4px 12px rgba(220,38,38,0.25);flex-shrink:0;}
+.nav-logo-img img{width:100%;height:100%;object-fit:cover}
+.nav-brand{font-size:13px;font-weight:800;color:var(--white);letter-spacing:-0.3px;font-family:'Cinzel',serif}
+.nav-brand span{background:linear-gradient(135deg,var(--red-l),var(--red));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.nav-right{display:flex;align-items:center;gap:8px}
+.nav-profile-btn{width:34px;height:34px;border-radius:10px;background:rgba(220,38,38,0.08);border:1px solid rgba(220,38,38,0.2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.18s;text-decoration:none;flex-shrink:0;}
+.nav-profile-btn:hover{background:rgba(220,38,38,0.16);border-color:var(--red);}
+.nav-profile-btn i{width:16px;height:16px;color:var(--red-l)}
+.nav-user-badge{display:flex;align-items:center;gap:6px;padding:5px 10px;background:rgba(220,38,38,0.07);border:1px solid rgba(220,38,38,0.18);border-radius:100px;font-size:11px;font-weight:700;color:var(--red-l);font-family:'JetBrains Mono',monospace;cursor:default;max-width:120px;overflow:hidden;}
+.nav-user-badge span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav-user-avatar{width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--red-d));display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:white;flex-shrink:0;}
+.tb-menu-btn{width:32px;height:32px;border-radius:9px;background:rgba(220,38,38,0.07);border:1px solid rgba(220,38,38,0.18);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;cursor:pointer;transition:background 0.18s,transform 0.15s;flex-shrink:0;touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
+.tb-menu-btn:hover{background:rgba(220,38,38,0.15)}
+.tb-menu-btn:active{transform:scale(0.93)}
+.tb-menu-btn span{display:block;width:14px;height:1.5px;background:var(--red-l);border-radius:2px}
+
+/* ── SIDE MENU ── */
+.overlay{position:fixed;inset:0;z-index:90;background:rgba(0,0,0,0);pointer-events:none;transition:background 0.3s ease;will-change:background}
+.overlay.open{background:rgba(0,0,0,0.6);pointer-events:auto;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+.side-menu{position:fixed;top:0;left:0;bottom:0;z-index:200;width:280px;background:rgba(17,17,17,0.98);backdrop-filter:blur(32px) saturate(180%);-webkit-backdrop-filter:blur(32px) saturate(180%);border-right:1px solid rgba(220,38,38,0.18);box-shadow:8px 0 48px rgba(0,0,0,0.6);transform:translate3d(-100%,0,0);transition:transform 0.32s cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column;overflow:hidden;will-change:transform;}
+.side-menu.open{transform:translate3d(0,0,0)}
+.sm-head{padding:32px 22px 20px;border-bottom:1px solid rgba(220,38,38,0.12);display:flex;align-items:center;gap:14px;position:relative}
+.sm-logo{width:44px;height:44px;border-radius:12px;overflow:hidden;border:1px solid rgba(220,38,38,0.3);box-shadow:0 6px 20px rgba(220,38,38,0.2);flex-shrink:0}
+.sm-logo img{width:100%;height:100%;object-fit:cover}
+.sm-brand{font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;color:var(--red-l);margin-bottom:2px}
+.sm-title{font-size:16px;font-weight:700;letter-spacing:-0.3px;color:var(--white);font-family:'Cinzel',serif}
+.sm-close{position:absolute;top:18px;right:18px;width:28px;height:28px;border-radius:50%;background:rgba(220,38,38,0.08);border:1px solid rgba(220,38,38,0.18);color:var(--gray);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.18s}
+.sm-close:hover{background:rgba(220,38,38,0.18);color:var(--white)}
+.sm-nav{padding:16px 14px;flex:1;display:flex;flex-direction:column;gap:3px;overflow-y:auto}
+.sm-btn{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:11px;background:none;border:none;width:100%;color:var(--gray);font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;cursor:pointer;transition:transform 0.18s,color 0.18s,background 0.18s;text-align:left;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.sm-btn:hover,.sm-btn.active{background:rgba(220,38,38,0.08);color:var(--white);transform:translate3d(4px,0,0)}
+.sm-btn.active{background:rgba(220,38,38,0.12);color:var(--red-l)}
+.sm-btn .sm-ico{width:22px;height:22px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sm-btn .sm-ico i{width:17px;height:17px;color:var(--red-l)}
+.sm-btn:hover .sm-ico i{color:var(--red-xl)}
+.sm-btn.active .sm-ico i{color:var(--red-xl)}
+.sm-btn .sm-lbl{flex:1}
+.sm-btn .sm-arr{font-size:11px;color:var(--red-d);opacity:0.6}
+.sm-sep{height:1px;background:rgba(220,38,38,0.1);margin:8px 14px}
+.sm-footer{padding:16px 20px;border-top:1px solid rgba(220,38,38,0.1);text-align:center;font-size:9px;color:var(--gray-l);font-family:'JetBrains Mono',monospace}
+.sm-footer span{color:var(--red-l);font-weight:700}
+
+/* ── PAGE LAYOUT ── */
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:0 20px 80px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.75)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes swapSpin{0%{transform:rotate(0deg) scale(1)}50%{transform:rotate(180deg) scale(1.25)}100%{transform:rotate(360deg) scale(1)}}
+@keyframes priceFlashUp{0%,100%{background:transparent}50%{background:rgba(34,197,94,0.15)}}
+@keyframes priceFlashDown{0%,100%{background:transparent}50%{background:rgba(220,38,38,0.15)}}
+@keyframes badgePop{0%{transform:scale(0.5);opacity:0}70%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+
+/* ── PAGE HEADER ── */
+.page-header{padding:36px 0 28px;animation:fadeUp 0.5s ease both}
+.ph-pill{display:inline-flex;align-items:center;gap:8px;padding:5px 14px;margin-bottom:18px;background:rgba(220,38,38,0.08);border:1px solid rgba(220,38,38,0.25);border-radius:100px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--red-l);font-family:'JetBrains Mono',monospace;}
+.ph-dot{width:6px;height:6px;border-radius:50%;background:var(--red);animation:pulse 2s infinite;box-shadow:0 0 8px var(--red)}
+.ph-title{font-size:clamp(28px,5vw,42px);font-weight:900;letter-spacing:-1.5px;font-family:'Cinzel',serif;color:var(--white);margin-bottom:8px;line-height:1.1}
+.ph-title span{background:linear-gradient(135deg,var(--red-l),var(--red));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.ph-sub{font-size:14px;color:var(--gray);line-height:1.6;max-width:520px}
+
+/* ── MARKET TICKER ── */
+.market-ticker{overflow:hidden;background:rgba(17,17,17,0.8);border:1px solid rgba(220,38,38,0.14);border-radius:12px;padding:0;margin-bottom:28px;position:relative}
+.ticker-inner{display:flex;gap:0;animation:tickerScroll 30s linear infinite;width:max-content}
+@keyframes tickerScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ticker-item{display:flex;align-items:center;gap:8px;padding:10px 22px;border-right:1px solid rgba(220,38,38,0.08);white-space:nowrap;flex-shrink:0}
+.ticker-coin{font-size:11px;font-weight:700;color:var(--white);font-family:'JetBrains Mono',monospace}
+.ticker-price{font-size:11px;font-weight:700;color:var(--red-l);font-family:'JetBrains Mono',monospace}
+.ticker-change{font-size:9.5px;font-weight:700;font-family:'JetBrains Mono',monospace;padding:2px 6px;border-radius:4px}
+.ticker-change.up{color:var(--green);background:rgba(34,197,94,0.1)}
+.ticker-change.down{color:var(--red-l);background:rgba(220,38,38,0.1)}
+
+/* ── TABS ── */
+.tabs-wrap{margin-bottom:28px}
+.tabs{display:flex;gap:4px;background:rgba(17,17,17,0.8);border:1px solid rgba(220,38,38,0.14);border-radius:14px;padding:5px}
+.tab-btn{flex:1;padding:11px 20px;border-radius:10px;border:none;background:transparent;color:var(--gray);font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.22s;display:flex;align-items:center;justify-content:center;gap:7px;-webkit-tap-highlight-color:transparent;}
+.tab-btn i{width:15px;height:15px}
+.tab-btn.active{background:linear-gradient(135deg,var(--red),var(--red-d));color:white;box-shadow:0 4px 16px rgba(220,38,38,0.35)}
+.tab-btn:not(.active):hover{background:rgba(220,38,38,0.08);color:var(--white)}
+.tab-panel{display:none;animation:fadeUp 0.35s ease both}
+.tab-panel.active{display:block}
+
+/* ── SECTION HEADERS ── */
+.sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+.sec-title{font-size:16px;font-weight:700;color:var(--white);font-family:'Cinzel',serif;display:flex;align-items:center;gap:8px}
+.sec-title i{width:18px;height:18px;color:var(--red-l)}
+.sec-badge{font-size:10px;font-weight:700;font-family:'JetBrains Mono',monospace;padding:3px 10px;border-radius:100px;background:rgba(220,38,38,0.08);border:1px solid rgba(220,38,38,0.2);color:var(--red-l)}
+.sec-badge.green{background:rgba(34,197,94,0.08);border-color:rgba(34,197,94,0.2);color:var(--green)}
+.refresh-badge{display:inline-flex;align-items:center;gap:5px;font-size:9px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--gray);padding:4px 10px;border:1px solid rgba(220,38,38,0.12);border-radius:100px}
+.refresh-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+
+/* ── CARD BASE ── */
+.card{background:var(--black2);border:1px solid rgba(220,38,38,0.12);border-radius:18px;padding:22px;box-shadow:var(--card-s);transition:border-color 0.2s}
+.card:hover{border-color:rgba(220,38,38,0.22)}
+
+/* ── P2P LISTINGS ── */
+.p2p-grid{display:grid;gap:12px;margin-bottom:32px}
+.listing-card{background:var(--black2);border:1px solid rgba(220,38,38,0.12);border-radius:16px;padding:18px 20px;display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;box-shadow:var(--card-s);transition:all 0.22s;position:relative;overflow:hidden;animation:fadeUp 0.35s ease both}
+.listing-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--red),var(--red-b));border-radius:4px 0 0 4px}
+.listing-card:hover{border-color:rgba(220,38,38,0.28);transform:translateY(-2px);box-shadow:var(--card-sh)}
+.listing-card.mine{border-color:rgba(220,38,38,0.22);background:rgba(220,38,38,0.03)}
+.listing-card.mine::before{background:linear-gradient(180deg,#f59e0b,#d97706)}
+.lc-info{min-width:0}
+.lc-seller{font-size:10px;font-weight:700;color:var(--red-l);font-family:'JetBrains Mono',monospace;letter-spacing:0.5px;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.lc-seller-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 5px var(--green)}
+.lc-pair{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.lc-coin{display:inline-flex;align-items:center;gap:5px;font-size:14px;font-weight:700;color:var(--white)}
+.lc-coin-emoji{font-size:16px}
+.lc-arrow{width:22px;height:22px;border-radius:50%;background:rgba(220,38,38,0.12);border:1px solid rgba(220,38,38,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.lc-arrow i{width:11px;height:11px;color:var(--red-l)}
+.lc-details{display:flex;gap:14px;flex-wrap:wrap}
+.lc-detail{font-size:11px;color:var(--gray);font-family:'JetBrains Mono',monospace}
+.lc-detail strong{color:var(--white)}
+.lc-price-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:6px;font-size:9.5px;font-weight:700;font-family:'JetBrains Mono',monospace;animation:badgePop 0.3s ease both}
+.lc-price-badge.up{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);color:var(--green)}
+.lc-price-badge.down{background:rgba(220,38,38,0.1);border:1px solid rgba(220,38,38,0.2);color:var(--red-l)}
+.lc-actions{display:flex;flex-direction:column;gap:8px;align-items:flex-end;flex-shrink:0}
+.btn-accept{padding:9px 18px;border-radius:10px;border:none;background:linear-gradient(135deg,var(--green-d),var(--green));color:white;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.22s;box-shadow:0 4px 14px rgba(34,197,94,0.25);display:flex;align-items:center;gap:6px;white-space:nowrap}
+.btn-accept i{width:13px;height:13px}
+.btn-accept:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(34,197,94,0.38)}
+.btn-accept:disabled{opacity:0.4;cursor:not-allowed;transform:none}
+.btn-cancel-listing{padding:9px 18px;border-radius:10px;border:1px solid rgba(220,38,38,0.3);background:rgba(220,38,38,0.08);color:var(--red-l);font-family:'Inter',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.22s;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.btn-cancel-listing i{width:13px;height:13px}
+.btn-cancel-listing:hover{background:rgba(220,38,38,0.15);border-color:var(--red);transform:translateY(-2px)}
+.btn-cancel-listing:disabled{opacity:0.4;cursor:not-allowed;transform:none}
+.lc-empty{text-align:center;padding:48px 20px;color:var(--gray-l);background:var(--black2);border:1px dashed rgba(220,38,38,0.15);border-radius:16px}
+.lc-empty-ico{width:48px;height:48px;border-radius:14px;background:rgba(220,38,38,0.05);display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.lc-empty-ico i{width:24px;height:24px;color:var(--gray-l)}
+.lc-empty p{font-size:13px;margin-bottom:6px;color:var(--gray)}
+.lc-empty span{font-size:11px;color:var(--gray-l);font-family:'JetBrains Mono',monospace}
+.loading-skeleton{background:linear-gradient(90deg,var(--black2) 25%,var(--black3) 50%,var(--black2) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:16px;height:100px}
+
+/* ── CREATE LISTING FORM ── */
+.create-listing-card{background:var(--black2);border:1px solid rgba(220,38,38,0.18);border-radius:18px;padding:24px;box-shadow:var(--card-s);margin-bottom:32px;position:relative;overflow:hidden}
+.create-listing-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--red-d),var(--red),var(--red-l))}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group.full{grid-column:span 2}
+.form-label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gray);font-family:'JetBrains Mono',monospace}
+.form-select,.form-input{background:var(--black3);border:1px solid rgba(220,38,38,0.15);border-radius:10px;color:var(--white);font-family:'Inter',sans-serif;font-size:13px;padding:11px 14px;outline:none;transition:all 0.22s;width:100%;appearance:none;-webkit-appearance:none}
+.form-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23ef4444' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;cursor:pointer}
+.form-select option{background:var(--black3);color:var(--white)}
+.form-input::placeholder{color:var(--gray-l)}
+.form-select:focus,.form-input:focus{border-color:rgba(220,38,38,0.45);background:var(--black4);box-shadow:0 0 0 3px rgba(220,38,38,0.08)}
+.form-hint{font-size:10px;color:var(--gray-l);font-family:'JetBrains Mono',monospace}
+.btn-create{padding:13px 28px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--red),var(--red-d));color:white;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.25s;box-shadow:0 6px 20px rgba(220,38,38,0.35);display:inline-flex;align-items:center;gap:8px}
+.btn-create i{width:15px;height:15px}
+.btn-create:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(220,38,38,0.45)}
+.btn-create:disabled{opacity:0.45;cursor:not-allowed;transform:none}
+.btn-create.loading{pointer-events:none}
+
+/* ── SWAP PANEL ── */
+.swap-container{max-width:520px;margin:0 auto}
+.swap-card{background:var(--black2);border:1px solid rgba(220,38,38,0.18);border-radius:22px;padding:28px;box-shadow:0 8px 40px rgba(0,0,0,0.4),0 0 0 1px rgba(220,38,38,0.06);position:relative;overflow:hidden}
+.swap-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--red-b),var(--red),var(--red-l),var(--red),var(--red-b))}
+.swap-rate-bar{background:rgba(220,38,38,0.06);border:1px solid rgba(220,38,38,0.12);border-radius:10px;padding:10px 16px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.srb-label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gray-l);font-family:'JetBrains Mono',monospace}
+.srb-rate{font-size:12px;font-weight:700;color:var(--red-l);font-family:'JetBrains Mono',monospace}
+.srb-refresh{display:flex;align-items:center;gap:5px;font-size:9px;color:var(--gray-l);font-family:'JetBrains Mono',monospace}
+.srb-refresh-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+.swap-panel{background:var(--black3);border:1px solid rgba(220,38,38,0.12);border-radius:14px;padding:18px;margin-bottom:8px;transition:border-color 0.2s}
+.swap-panel:focus-within{border-color:rgba(220,38,38,0.35);box-shadow:0 0 0 3px rgba(220,38,38,0.06)}
+.sp-label{font-size:9.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray);font-family:'JetBrains Mono',monospace;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+.sp-balance{font-size:9px;color:var(--gray-l);font-family:'JetBrains Mono',monospace}
+.sp-row{display:flex;align-items:center;gap:12px}
+.sp-coin-select{display:flex;align-items:center;gap:8px;background:var(--black4);border:1px solid rgba(220,38,38,0.18);border-radius:10px;padding:9px 12px;cursor:pointer;transition:all 0.18s;position:relative;min-width:130px}
+.sp-coin-select:hover{border-color:rgba(220,38,38,0.35);background:rgba(220,38,38,0.05)}
+.sp-coin-emoji{font-size:20px;flex-shrink:0}
+.sp-coin-name{font-size:13px;font-weight:700;color:var(--white);font-family:'JetBrains Mono',monospace;flex:1}
+.sp-coin-chevron{width:14px;height:14px;color:var(--gray);flex-shrink:0}
+.sp-amount-wrap{flex:1;min-width:0}
+.sp-amount-input{width:100%;background:transparent;border:none;outline:none;font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--white);text-align:right;padding:0}
+.sp-amount-input::placeholder{color:var(--gray-d)}
+.sp-amount-label{font-size:10px;color:var(--gray-l);font-family:'JetBrains Mono',monospace;text-align:right;margin-top:4px}
+.swap-arrow-btn{width:48px;height:48px;border-radius:50%;border:2px solid rgba(220,38,38,0.2);background:var(--black3);display:flex;align-items:center;justify-content:center;cursor:pointer;margin:0 auto;transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);box-shadow:0 4px 16px rgba(0,0,0,0.4);position:relative;z-index:1}
+.swap-arrow-btn:hover{border-color:var(--red);background:rgba(220,38,38,0.1);transform:rotate(180deg)}
+.swap-arrow-btn.spinning{animation:swapSpin 0.5s ease both}
+.swap-arrow-btn i{width:20px;height:20px;color:var(--red-l);transition:transform 0.3s}
+.swap-mid{display:flex;align-items:center;gap:12px;margin:6px 0;padding:0 4px}
+.swap-divider{flex:1;height:1px;background:rgba(220,38,38,0.1)}
+.swap-summary{background:rgba(220,38,38,0.04);border:1px solid rgba(220,38,38,0.1);border-radius:12px;padding:16px 18px;margin:20px 0;display:flex;flex-direction:column;gap:10px}
+.ss-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ss-key{font-size:11px;color:var(--gray);font-family:'JetBrains Mono',monospace}
+.ss-val{font-size:12px;font-weight:700;color:var(--white);font-family:'JetBrains Mono',monospace}
+.ss-val.pay{color:var(--red-l)}
+.ss-val.receive{color:var(--green)}
+.ss-divider{height:1px;background:rgba(220,38,38,0.08)}
+.btn-swap{width:100%;padding:16px;border-radius:14px;border:none;background:linear-gradient(135deg,var(--red),var(--red-d));color:white;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.25s cubic-bezier(0.34,1.4,0.64,1);box-shadow:0 8px 28px rgba(220,38,38,0.4);display:flex;align-items:center;justify-content:center;gap:10px;letter-spacing:-0.2px}
+.btn-swap i{width:18px;height:18px}
+.btn-swap:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(220,38,38,0.55)}
+.btn-swap:active{transform:scale(0.97)}
+.btn-swap:disabled{opacity:0.4;cursor:not-allowed;transform:none;box-shadow:none}
+
+/* ── COIN DROPDOWN ── */
+.coin-dropdown{position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--black3);border:1px solid rgba(220,38,38,0.2);border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,0.6);z-index:50;overflow:hidden;display:none}
+.coin-dropdown.open{display:block;animation:fadeUp 0.18s ease both}
+.cd-item{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;transition:background 0.15s;border-bottom:1px solid rgba(220,38,38,0.06)}
+.cd-item:last-child{border-bottom:none}
+.cd-item:hover,.cd-item.selected{background:rgba(220,38,38,0.08)}
+.cd-emoji{font-size:18px}
+.cd-name{font-size:12px;font-weight:700;color:var(--white);font-family:'JetBrains Mono',monospace}
+
+/* ── MY LISTINGS ── */
+.my-listings-section{margin-top:8px}
+
+/* ── LOGIN OVERLAY ── */
+.login-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeUp 0.3s ease both}
+.lo-card{background:var(--black2);border:1px solid rgba(220,38,38,0.22);border-radius:24px;padding:40px 36px;text-align:center;max-width:380px;width:100%;position:relative;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.7),0 0 0 1px rgba(220,38,38,0.1)}
+.lo-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--red-b),var(--red),var(--red-l))}
+.lo-icon{width:64px;height:64px;border-radius:18px;background:rgba(220,38,38,0.08);border:1px solid rgba(220,38,38,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+.lo-icon i{width:30px;height:30px;color:var(--red-l)}
+.lo-title{font-size:22px;font-weight:700;color:var(--white);font-family:'Cinzel',serif;margin-bottom:8px;letter-spacing:-0.3px}
+.lo-sub{font-size:13px;color:var(--gray);line-height:1.6;margin-bottom:28px}
+.lo-btns{display:flex;flex-direction:column;gap:10px}
+.lo-btn-primary{padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--red),var(--red-d));color:white;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.22s;box-shadow:0 6px 20px rgba(220,38,38,0.35);text-decoration:none;display:block}
+.lo-btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(220,38,38,0.45)}
+.lo-btn-ghost{padding:13px;border-radius:12px;border:1.5px solid rgba(220,38,38,0.25);background:transparent;color:var(--red-l);font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.22s;text-decoration:none;display:block}
+.lo-btn-ghost:hover{background:rgba(220,38,38,0.08);border-color:var(--red)}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--black2);border:1px solid rgba(220,38,38,0.25);border-radius:14px;padding:13px 22px;font-size:13px;font-weight:600;color:var(--white);z-index:500;transition:transform 0.38s cubic-bezier(0.34,1.4,0.64,1);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,0.5);display:flex;align-items:center;gap:8px;max-width:90vw}
+#toast.show{transform:translateX(-50%) translateY(0)}
+#toast i{width:16px;height:16px;flex-shrink:0}
+#toast.success{border-color:rgba(34,197,94,0.3);background:rgba(17,17,17,0.97)}
+#toast.success i{color:var(--green)}
+#toast.error{border-color:rgba(220,38,38,0.35);background:rgba(17,17,17,0.97)}
+#toast.error i{color:var(--red-l)}
+#toast.info{border-color:rgba(59,130,246,0.3);background:rgba(17,17,17,0.97)}
+#toast.info i{color:#60a5fa}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--black)}
+::-webkit-scrollbar-thumb{background:rgba(220,38,38,0.3);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--red)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:640px){
+  .page{padding:0 14px 60px}
+  .form-grid{grid-template-columns:1fr}
+  .form-group.full{grid-column:span 1}
+  .listing-card{grid-template-columns:1fr;gap:10px}
+  .lc-actions{flex-direction:row;align-items:flex-start}
+  .swap-card{padding:20px}
+  .sp-amount-input{font-size:18px}
+  .ph-title{letter-spacing:-1px}
+  .lo-card{padding:32px 24px}
+}
+@media(max-width:380px){
+  .sp-coin-select{min-width:110px}
+  .sp-amount-input{font-size:15px}
+}
+</style>
+</head>
+<body>
+
+<!-- ── SIDE MENU OVERLAY ── -->
+<div class="overlay" id="overlay" onclick="closeMenu()"></div>
+
+<!-- ── SIDE MENU ── -->
+<nav class="side-menu" id="sideMenu">
+  <div class="sm-head">
+    <div class="sm-logo"><img src="https://files.catbox.moe/qhrzt2.jpg" alt="logo"></div>
+    <div>
+      <div class="sm-brand">Black Cat Studio</div>
+      <div class="sm-title">Mezuka MD V5</div>
+    </div>
+    <button class="sm-close" onclick="closeMenu()">✕</button>
+  </div>
+  <div class="sm-nav">
+    <button class="sm-btn" onclick="navigate('main.html')"><span class="sm-ico"><i data-lucide="house"></i></span><span class="sm-lbl">Home</span><span class="sm-arr">›</span></button>
+    <button class="sm-btn" onclick="navigate('pair.html')"><span class="sm-ico"><i data-lucide="link"></i></span><span class="sm-lbl">Connect Bot</span><span class="sm-arr">›</span></button>
+    <button class="sm-btn" onclick="navigate('settings.html')"><span class="sm-ico"><i data-lucide="settings-2"></i></span><span class="sm-lbl">Settings</span><span class="sm-arr">›</span></button>
+    <div class="sm-sep"></div>
+    <div style="font-size:9px;font-weight:700;letter-spacing:1px;color:var(--red-l);margin:4px 14px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;">Trading Suite</div>
+    <button class="sm-btn" onclick="navigate('tradings.html')"><span class="sm-ico"><i data-lucide="trending-up"></i></span><span class="sm-lbl">Trading Terminal</span><span class="sm-arr">›</span></button>
+    <button class="sm-btn active" onclick="navigate('exchange.html')"><span class="sm-ico"><i data-lucide="arrow-left-right"></i></span><span class="sm-lbl">Exchange</span><span class="sm-arr">›</span></button>
+    <button class="sm-btn" onclick="navigate('toolshop.html')"><span class="sm-ico"><i data-lucide="shopping-bag"></i></span><span class="sm-lbl">Tool Shop</span><span class="sm-arr">›</span></button>
+    <button class="sm-btn" onclick="navigate('profile.html')"><span class="sm-ico"><i data-lucide="user-circle-2"></i></span><span class="sm-lbl">My Profile</span><span class="sm-arr">›</span></button>
+    <div class="sm-sep"></div>
+    <button class="sm-btn" onclick="navigate('react.html')"><span class="sm-ico"><i data-lucide="zap"></i></span><span class="sm-lbl">Auto Reaction</span><span class="sm-arr">›</span></button>
+    <button class="sm-btn" onclick="navigate('shop.html')"><span class="sm-ico"><i data-lucide="coins"></i></span><span class="sm-lbl">Coin Shop</span><span class="sm-arr">›</span></button>
+    <button class="sm-btn" onclick="navigate('team.html')"><span class="sm-ico"><i data-lucide="users"></i></span><span class="sm-lbl">Admin Team</span><span class="sm-arr">›</span></button>
+    <button class="sm-btn" onclick="navigate('contact.html')"><span class="sm-ico"><i data-lucide="mail"></i></span><span class="sm-lbl">Contact Us</span><span class="sm-arr">›</span></button>
+    <button class="sm-btn" onclick="navigate('news.html')"><span class="sm-ico"><i data-lucide="newspaper"></i></span><span class="sm-lbl">Latest News</span><span class="sm-arr">›</span></button>
+  </div>
+  <div class="sm-footer">Powered by <span>Mezuka MD V5</span><br>made by <span>nimeshka mihiran</span></div>
+</nav>
+
+<!-- ── NAV BAR ── -->
+<nav class="nav">
+  <div class="nav-logo">
+    <div class="tb-menu-btn" onclick="openMenu()"><span></span><span></span><span></span></div>
+    <div class="nav-logo-img"><img src="https://files.catbox.moe/qhrzt2.jpg" alt="Mezuka"></div>
+    <div class="nav-brand">Mezuka MD <span>V5</span></div>
+  </div>
+  <div class="nav-right">
+    <div id="navUserBadge" style="display:none" class="nav-user-badge">
+      <div class="nav-user-avatar" id="navUserAvatar">?</div>
+      <span id="navUserName">User</span>
+    </div>
+    <a class="nav-profile-btn" href="profile.html" title="Profile">
+      <i data-lucide="user-circle-2"></i>
+    </a>
+  </div>
+</nav>
+
+<!-- ── LOGIN OVERLAY ── -->
+<div class="login-overlay" id="loginOverlay" style="display:none">
+  <div class="lo-card">
+    <div class="lo-icon"><i data-lucide="lock-keyhole"></i></div>
+    <div class="lo-title">Login Required</div>
+    <p class="lo-sub">You need to be logged in to access the Exchange. Create or sign in to your Mezuka account to start trading.</p>
+    <div class="lo-btns">
+      <a class="lo-btn-primary" href="settings.html">Sign In / Sign Up</a>
+      <button class="lo-btn-ghost" onclick="dismissLoginOverlay()">Browse Without Login</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── MAIN PAGE ── -->
+<main class="page">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="ph-pill"><span class="ph-dot"></span>Live Exchange</div>
+    <h1 class="ph-title">Coin <span>Exchange</span></h1>
+    <p class="ph-sub">Trade NENO ecosystem coins peer-to-peer or swap instantly at live market rates.</p>
+  </div>
+
+  <!-- Market Ticker -->
+  <div class="market-ticker" id="marketTicker">
+    <div class="ticker-inner" id="tickerInner">
+      <!-- populated by JS -->
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs-wrap">
+    <div class="tabs">
+      <button class="tab-btn active" id="tab-p2p" onclick="switchTab('p2p')">
+        <i data-lucide="users-round"></i> P2P Exchange
+      </button>
+      <button class="tab-btn" id="tab-swap" onclick="switchTab('swap')">
+        <i data-lucide="repeat-2"></i> Direct Swap
+      </button>
+    </div>
+  </div>
+
+  <!-- ══ TAB 1: P2P EXCHANGE ══ -->
+  <div class="tab-panel active" id="panel-p2p">
+
+    <!-- Active Listings -->
+    <div class="sec-hd">
+      <div class="sec-title"><i data-lucide="list"></i> Active Listings</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="refresh-badge"><span class="refresh-dot"></span>Auto-refresh 15s</div>
+        <span class="sec-badge" id="listingCount">0 listings</span>
+      </div>
+    </div>
+    <div class="p2p-grid" id="listingsGrid">
+      <div class="loading-skeleton" style="height:90px"></div>
+      <div class="loading-skeleton" style="height:90px;animation-delay:0.1s"></div>
+      <div class="loading-skeleton" style="height:90px;animation-delay:0.2s"></div>
+    </div>
+
+    <!-- Create Listing -->
+    <div class="create-listing-card" id="createListingSection">
+      <div class="sec-hd" style="margin-bottom:20px">
+        <div class="sec-title"><i data-lucide="plus-circle"></i> Create Listing</div>
+        <span class="sec-badge green">Post Trade</span>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">From Coin</label>
+          <select class="form-select" id="fromCoinSelect">
+            <option value="NENO">🪙 NENO</option>
+            <option value="RED">🔴 RED</option>
+            <option value="GREEN">🟢 GREEN</option>
+            <option value="MEZUKA">⭐ MEZUKA</option>
+            <option value="UP">⬆️ UP</option>
+            <option value="ROOT">🌿 ROOT</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">To Coin</label>
+          <select class="form-select" id="toCoinSelect">
+            <option value="RED">🔴 RED</option>
+            <option value="GREEN">🟢 GREEN</option>
+            <option value="MEZUKA">⭐ MEZUKA</option>
+            <option value="UP">⬆️ UP</option>
+            <option value="ROOT">🌿 ROOT</option>
+            <option value="NENO">🪙 NENO</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Amount to Offer</label>
+          <input type="number" class="form-input" id="listingAmount" placeholder="e.g. 100" min="1" step="0.01">
+          <span class="form-hint">Amount of the From coin you'll give</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Price per Coin (NENO)</label>
+          <input type="number" class="form-input" id="listingPrice" placeholder="e.g. 5.00" min="0.01" step="0.01">
+          <span class="form-hint">Rate in NENO per unit of To coin</span>
+        </div>
+        <div class="form-group full" style="align-items:flex-end">
+          <button class="btn-create" id="createListingBtn" onclick="createListing()">
+            <i data-lucide="plus"></i> Post Listing
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- My Listings -->
+    <div class="my-listings-section">
+      <div class="sec-hd">
+        <div class="sec-title"><i data-lucide="bookmark"></i> My Listings</div>
+        <span class="sec-badge" id="myListingCount">0</span>
+      </div>
+      <div class="p2p-grid" id="myListingsGrid">
+        <!-- populated by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ TAB 2: DIRECT SWAP ══ -->
+  <div class="tab-panel" id="panel-swap">
+    <div class="swap-container">
+      <div class="swap-card">
+        <!-- Rate Bar -->
+        <div class="swap-rate-bar">
+          <span class="srb-label">Exchange Rate</span>
+          <span class="srb-rate" id="swapRateDisplay">Loading…</span>
+          <div class="srb-refresh"><span class="srb-refresh-dot"></span>Refreshes 10s</div>
+        </div>
+
+        <!-- From Panel -->
+        <div class="swap-panel">
+          <div class="sp-label">
+            <span>You Pay</span>
+            <span class="sp-balance" id="fromBalance">Balance: —</span>
+          </div>
+          <div class="sp-row">
+            <div class="sp-coin-select" id="fromCoinDisplay" onclick="openCoinDropdown('from')">
+              <span class="sp-coin-emoji" id="fromEmoji">🪙</span>
+              <span class="sp-coin-name" id="fromName">NENO</span>
+              <i data-lucide="chevron-down" class="sp-coin-chevron"></i>
+              <div class="coin-dropdown" id="fromDropdown"></div>
+            </div>
+            <div class="sp-amount-wrap">
+              <input type="number" class="sp-amount-input" id="fromAmount" placeholder="0.00" min="0" step="0.01" oninput="calcSwap()">
+              <div class="sp-amount-label" id="fromUsdLabel">≈ 0 NENO</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Swap Mid -->
+        <div class="swap-mid">
+          <div class="swap-divider"></div>
+          <button class="swap-arrow-btn" id="swapArrowBtn" onclick="flipSwap()" title="Flip coins">
+            <i data-lucide="arrow-up-down"></i>
+          </button>
+          <div class="swap-divider"></div>
+        </div>
+
+        <!-- To Panel -->
+        <div class="swap-panel">
+          <div class="sp-label">
+            <span>You Receive</span>
+            <span class="sp-balance" id="toBalance">Balance: —</span>
+          </div>
+          <div class="sp-row">
+            <div class="sp-coin-select" id="toCoinDisplay" onclick="openCoinDropdown('to')">
+              <span class="sp-coin-emoji" id="toEmoji">🔴</span>
+              <span class="sp-coin-name" id="toName">RED</span>
+              <i data-lucide="chevron-down" class="sp-coin-chevron"></i>
+              <div class="coin-dropdown" id="toDropdown"></div>
+            </div>
+            <div class="sp-amount-wrap">
+              <input type="number" class="sp-amount-input" id="toAmount" placeholder="0.00" readonly style="color:var(--green);cursor:default">
+              <div class="sp-amount-label" id="toUsdLabel">≈ 0 NENO</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="swap-summary" id="swapSummary">
+          <div class="ss-row">
+            <span class="ss-key">You Pay</span>
+            <span class="ss-val pay" id="summaryPay">0 NENO</span>
+          </div>
+          <div class="ss-divider"></div>
+          <div class="ss-row">
+            <span class="ss-key">You Receive</span>
+            <span class="ss-val receive" id="summaryReceive">0 RED</span>
+          </div>
+          <div class="ss-divider"></div>
+          <div class="ss-row">
+            <span class="ss-key">Exchange Rate</span>
+            <span class="ss-val" id="summaryRate">1 NENO = — RED</span>
+          </div>
+          <div class="ss-row">
+            <span class="ss-key">Network Fee</span>
+            <span class="ss-val" style="color:var(--gray)">0.1%</span>
+          </div>
+        </div>
+
+        <!-- Swap Button -->
+        <button class="btn-swap" id="swapBtn" onclick="executeSwap()">
+          <i data-lucide="repeat-2"></i> Swap Now
+        </button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ── TOAST ── -->
+<div id="toast"><i data-lucide="check-circle"></i><span id="toastMsg"></span></div>
+
+<script>
+/* ══════════════════════════════════════
+   CONSTANTS & STATE
+══════════════════════════════════════ */
+const COINS = [
+  {id:'NENO',emoji:'🪙',name:'NENO'},
+  {id:'RED',emoji:'🔴',name:'RED'},
+  {id:'GREEN',emoji:'🟢',name:'GREEN'},
+  {id:'MEZUKA',emoji:'⭐',name:'MEZUKA'},
+  {id:'UP',emoji:'⬆️',name:'UP'},
+  {id:'ROOT',emoji:'🌿',name:'ROOT'}
+];
+
+const COIN_MAP = {};
+COINS.forEach(c => COIN_MAP[c.id] = c);
+
+let token = localStorage.getItem('trading_token');
+let user  = null;
+try { user = JSON.parse(localStorage.getItem('trading_user') || 'null'); } catch(e){}
+
+let marketPrices = {RED:1,GREEN:1,MEZUKA:1,UP:1,ROOT:1};
+let prevPrices   = {RED:1,GREEN:1,MEZUKA:1,UP:1,ROOT:1};
+let allListings  = [];
+let userCoins    = {};
+
+let swapFrom = 'NENO';
+let swapTo   = 'RED';
+let swapRefreshTimer = null;
+let listingRefreshTimer = null;
+let tickerInterval = null;
+let openDropdown = null;
+
+/* ══════════════════════════════════════
+   INIT
+══════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', async () => {
+  lucide.createIcons();
+
+  // Update nav user badge
+  if (user) {
+    document.getElementById('navUserBadge').style.display = 'flex';
+    const initials = (user.username||'U').substring(0,2).toUpperCase();
+    document.getElementById('navUserAvatar').textContent = initials;
+    document.getElementById('navUserName').textContent = user.username || 'User';
+  }
+
+  // Show login overlay if not logged in
+  if (!token) {
+    document.getElementById('loginOverlay').style.display = 'flex';
+    lucide.createIcons();
+  }
+
+  // Load market data
+  await loadMarket();
+  buildTicker();
+
+  // Load p2p listings
+  await loadListings();
+
+  // Start auto-refresh timers
+  listingRefreshTimer = setInterval(async () => {
+    await loadMarket();
+    await loadListings();
+    buildTicker();
+  }, 15000);
+
+  swapRefreshTimer = setInterval(async () => {
+    await loadMarket();
+    calcSwap();
+    buildTicker();
+  }, 10000);
+
+  // Build swap dropdowns
+  buildCoinDropdowns();
+  calcSwap();
+
+  lucide.createIcons();
+});
+
+/* ══════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════ */
+function navigate(page) {
+  window.location.href = page;
+}
+function openMenu() {
+  document.getElementById('sideMenu').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+}
+function closeMenu() {
+  document.getElementById('sideMenu').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+}
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.getElementById('panel-' + tab).classList.add('active');
+  lucide.createIcons();
+  if (tab === 'swap') calcSwap();
+}
+function dismissLoginOverlay() {
+  document.getElementById('loginOverlay').style.display = 'none';
+}
+
+/* ══════════════════════════════════════
+   TOAST
+══════════════════════════════════════ */
+let toastTimer = null;
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  const ico = t.querySelector('i');
+  const span = document.getElementById('toastMsg');
+  t.className = 'show ' + type;
+  span.textContent = msg;
+  // set icon
+  const iconMap = {success:'check-circle',error:'x-circle',info:'info'};
+  ico.setAttribute('data-lucide', iconMap[type] || 'info');
+  lucide.createIcons();
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.classList.remove('show'); }, 3500);
+}
+
+/* ══════════════════════════════════════
+   MARKET DATA
+══════════════════════════════════════ */
+async function loadMarket() {
+  try {
+    const r = await fetch('/api/trading/market');
+    const d = await r.json();
+    if (d.ok && d.prices) {
+      prevPrices = {...marketPrices};
+      marketPrices = d.prices;
+    } else {
+      // simulate prices if no API
+      simulatePrices();
+    }
+  } catch(e) {
+    simulatePrices();
+  }
+}
+
+function simulatePrices() {
+  prevPrices = {...marketPrices};
+  COINS.filter(c => c.id !== 'NENO').forEach(c => {
+    const change = (Math.random() - 0.48) * 0.08;
+    marketPrices[c.id] = Math.max(0.01, (marketPrices[c.id] || 1) * (1 + change));
+  });
+}
+
+/* ══════════════════════════════════════
+   MARKET TICKER
+══════════════════════════════════════ */
+function buildTicker() {
+  const coins = COINS.filter(c => c.id !== 'NENO');
+  let html = '';
+  // build items twice for seamless loop
+  for (let pass = 0; pass < 2; pass++) {
+    coins.forEach(c => {
+      const price = marketPrices[c.id] || 1;
+      const prev  = prevPrices[c.id] || 1;
+      const pct   = ((price - prev) / prev) * 100;
+      const isUp  = pct >= 0;
+      const pctStr = (isUp?'+':'') + pct.toFixed(2) + '%';
+      html += `<div class="ticker-item">
+        <span class="ticker-coin">${c.emoji} ${c.id}</span>
+        <span class="ticker-price">${price.toFixed(4)} NENO</span>
+        <span class="ticker-change ${isUp?'up':'down'}">${pctStr}</span>
+      </div>`;
+    });
+  }
+  const inner = document.getElementById('tickerInner');
+  if (inner) inner.innerHTML = html;
+}
+
+/* ══════════════════════════════════════
+   P2P LISTINGS
+══════════════════════════════════════ */
+async function loadListings() {
+  try {
+    const r = await fetch('/api/trading/p2p');
+    const d = await r.json();
+    if (d.ok) {
+      allListings = d.listings || [];
+    } else {
+      allListings = getMockListings();
+    }
+  } catch(e) {
+    allListings = getMockListings();
+  }
+
+  // simulate price movement on listings
+  simulateListingPrices();
+  renderListings();
+}
+
+function getMockListings() {
+  return [
+    {_id:'1',seller:{username:'TraderKing'},fromCoin:'NENO',toCoin:'RED',amount:500,price:2.5,prevPrice:2.3},
+    {_id:'2',seller:{username:'CryptoWolf'},fromCoin:'RED',toCoin:'GREEN',amount:200,price:1.8,prevPrice:1.9},
+    {_id:'3',seller:{username:'MezukaFan'},fromCoin:'GREEN',toCoin:'MEZUKA',amount:1000,price:0.75,prevPrice:0.72},
+    {_id:'4',seller:{username:'RootMaster'},fromCoin:'UP',toCoin:'ROOT',amount:50,price:12.0,prevPrice:11.5},
+  ];
+}
+
+function simulateListingPrices() {
+  allListings.forEach(l => {
+    l.prevPrice = l.price || l.prevPrice || 1;
+    const change = (Math.random() - 0.45) * 0.06;
+    l.price = Math.max(0.01, (l.price || 1) * (1 + change));
+  });
+}
+
+function renderListings() {
+  const currentUser = user ? (user.username || user._id) : null;
+  const otherListings = allListings.filter(l => {
+    const seller = l.seller?.username || l.seller;
+    return seller !== currentUser;
+  });
+  const myListings = allListings.filter(l => {
+    const seller = l.seller?.username || l.seller;
+    return seller === currentUser;
+  });
+
+  // Update counts
+  const countEl = document.getElementById('listingCount');
+  if (countEl) countEl.textContent = `${otherListings.length} listing${otherListings.length !== 1 ? 's' : ''}`;
+  const myCountEl = document.getElementById('myListingCount');
+  if (myCountEl) myCountEl.textContent = String(myListings.length);
+
+  // Render other listings
+  const grid = document.getElementById('listingsGrid');
+  if (grid) {
+    if (otherListings.length === 0) {
+      grid.innerHTML = `<div class="lc-empty">
+        <div class="lc-empty-ico"><i data-lucide="inbox"></i></div>
+        <p>No active listings yet</p>
+        <span>Be the first to create a P2P trade!</span>
+      </div>`;
+    } else {
+      grid.innerHTML = otherListings.map(l => listingCard(l, false)).join('');
+    }
+  }
+
+  // Render my listings
+  const myGrid = document.getElementById('myListingsGrid');
+  if (myGrid) {
+    if (myListings.length === 0) {
+      myGrid.innerHTML = `<div class="lc-empty">
+        <div class="lc-empty-ico"><i data-lucide="bookmark-minus"></i></div>
+        <p>No active listings</p>
+        <span>Create a listing above to start trading</span>
+      </div>`;
+    } else {
+      myGrid.innerHTML = myListings.map(l => listingCard(l, true)).join('');
+    }
+  }
+
+  lucide.createIcons();
+}
+
+function listingCard(listing, isMine) {
+  const fromCoin = COIN_MAP[listing.fromCoin] || {emoji:'🪙',name:listing.fromCoin};
+  const toCoin   = COIN_MAP[listing.toCoin]   || {emoji:'🪙',name:listing.toCoin};
+  const seller   = listing.seller?.username || listing.seller || 'Unknown';
+  const amount   = (listing.amount || 0).toLocaleString(undefined, {maximumFractionDigits:4});
+  const price    = (listing.price  || 0).toFixed(4);
+  const prevPrice= listing.prevPrice || listing.price || 0;
+  const isUp     = (listing.price || 0) >= prevPrice;
+  const pct      = prevPrice > 0 ? Math.abs(((listing.price - prevPrice) / prevPrice) * 100).toFixed(2) : '0.00';
+
+  const badgeHtml = `<span class="lc-price-badge ${isUp?'up':'down'}">
+    ${isUp ? '▲' : '▼'} ${pct}%
+  </span>`;
+
+  const actionBtn = isMine
+    ? `<button class="btn-cancel-listing" onclick="cancelListing('${listing._id}', this)" ${!token?'disabled':''}>
+         <i data-lucide="x"></i> Cancel
+       </button>`
+    : `<button class="btn-accept" onclick="acceptListing('${listing._id}', this)" ${!token?'disabled':''}>
+         <i data-lucide="check"></i> Accept
+       </button>`;
+
+  return `<div class="listing-card ${isMine?'mine':''}">
+    <div class="lc-info">
+      <div class="lc-seller">
+        <span class="lc-seller-dot"></span>
+        ${escapeHtml(seller)}${isMine ? ' <span style="color:var(--gray-l);font-weight:400">(You)</span>' : ''}
+      </div>
+      <div class="lc-pair">
+        <div class="lc-coin"><span class="lc-coin-emoji">${fromCoin.emoji}</span>${fromCoin.name}</div>
+        <div class="lc-arrow"><i data-lucide="arrow-right"></i></div>
+        <div class="lc-coin"><span class="lc-coin-emoji">${toCoin.emoji}</span>${toCoin.name}</div>
+        ${badgeHtml}
+      </div>
+      <div class="lc-details">
+        <div class="lc-detail">Amount: <strong>${amount} ${fromCoin.name}</strong></div>
+        <div class="lc-detail">Price: <strong>${price} NENO</strong></div>
+      </div>
+    </div>
+    <div class="lc-actions">
+      ${actionBtn}
+    </div>
+  </div>`;
+}
+
+async function acceptListing(id, btn) {
+  if (!token) { showToast('Please login first', 'error'); return; }
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i data-lucide="loader-2"></i> Accepting…'; lucide.createIcons(); }
+  try {
+    const r = await fetch(`/api/trading/p2p/accept/${id}`, {
+      method: 'POST',
+      headers: {Authorization: `Bearer ${token}`}
+    });
+    const d = await r.json();
+    if (d.ok) {
+      showToast('Trade accepted successfully! 🎉', 'success');
+      await loadListings();
+    } else {
+      showToast(d.message || 'Failed to accept trade', 'error');
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i data-lucide="check"></i> Accept'; lucide.createIcons(); }
+    }
+  } catch(e) {
+    showToast('Network error. Try again.', 'error');
+    if (btn) { btn.disabled = false; btn.innerHTML = '<i data-lucide="check"></i> Accept'; lucide.createIcons(); }
+  }
+}
+
+async function cancelListing(id, btn) {
+  if (!token) { showToast('Please login first', 'error'); return; }
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i data-lucide="loader-2"></i> Cancelling…'; lucide.createIcons(); }
+  try {
+    const r = await fetch(`/api/trading/p2p/cancel/${id}`, {
+      method: 'POST',
+      headers: {Authorization: `Bearer ${token}`}
+    });
+    const d = await r.json();
+    if (d.ok) {
+      showToast('Listing cancelled', 'info');
+      await loadListings();
+    } else {
+      showToast(d.message || 'Failed to cancel listing', 'error');
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i data-lucide="x"></i> Cancel'; lucide.createIcons(); }
+    }
+  } catch(e) {
+    showToast('Network error. Try again.', 'error');
+    if (btn) { btn.disabled = false; btn.innerHTML = '<i data-lucide="x"></i> Cancel'; lucide.createIcons(); }
+  }
+}
+
+async function createListing() {
+  if (!token) { showToast('Please login to post a listing', 'error'); return; }
+
+  const fromCoin = document.getElementById('fromCoinSelect').value;
+  const toCoin   = document.getElementById('toCoinSelect').value;
+  const amount   = parseFloat(document.getElementById('listingAmount').value);
+  const price    = parseFloat(document.getElementById('listingPrice').value);
+
+  if (!fromCoin || !toCoin) { showToast('Select both coins', 'error'); return; }
+  if (fromCoin === toCoin)   { showToast('From and To coins must differ', 'error'); return; }
+  if (!amount || amount <= 0){ showToast('Enter a valid amount', 'error'); return; }
+  if (!price  || price  <= 0){ showToast('Enter a valid price', 'error'); return; }
+
+  const btn = document.getElementById('createListingBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i data-lucide="loader-2"></i> Posting…';
+  lucide.createIcons();
+
+  try {
+    const r = await fetch('/api/trading/p2p/create', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({fromCoin, toCoin, amount, price})
+    });
+    const d = await r.json();
+    if (d.ok) {
+      showToast('Listing posted successfully! 📢', 'success');
+      document.getElementById('listingAmount').value = '';
+      document.getElementById('listingPrice').value  = '';
+      await loadListings();
+    } else {
+      showToast(d.message || 'Failed to create listing', 'error');
+    }
+  } catch(e) {
+    showToast('Network error. Try again.', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i data-lucide="plus"></i> Post Listing';
+    lucide.createIcons();
+  }
+}
+
+/* ══════════════════════════════════════
+   DIRECT SWAP
+══════════════════════════════════════ */
+function buildCoinDropdowns() {
+  ['from','to'].forEach(dir => {
+    const dd = document.getElementById(dir + 'Dropdown');
+    if (!dd) return;
+    dd.innerHTML = COINS.map(c => `
+      <div class="cd-item ${(dir==='from'?swapFrom:swapTo)===c.id?'selected':''}" onclick="selectSwapCoin('${dir}','${c.id}',event)">
+        <span class="cd-emoji">${c.emoji}</span>
+        <span class="cd-name">${c.name}</span>
+      </div>`).join('');
+  });
+}
+
+function openCoinDropdown(dir) {
+  // Close any open
+  document.querySelectorAll('.coin-dropdown').forEach(d => d.classList.remove('open'));
+
+  const dd = document.getElementById(dir + 'Dropdown');
+  if (!dd) return;
+
+  if (openDropdown === dir) {
+    openDropdown = null;
+    return;
+  }
+
+  buildCoinDropdowns();
+  dd.classList.add('open');
+  openDropdown = dir;
+  lucide.createIcons();
+
+  // close on outside click
+  setTimeout(() => {
+    document.addEventListener('click', closeDropdownsOutside, {once: true});
+  }, 10);
+}
+
+function closeDropdownsOutside(e) {
+  if (!e.target.closest('.sp-coin-select')) {
+    document.querySelectorAll('.coin-dropdown').forEach(d => d.classList.remove('open'));
+    openDropdown = null;
+  }
+}
+
+function selectSwapCoin(dir, coinId, e) {
+  e.stopPropagation();
+  if (dir === 'from') {
+    if (coinId === swapTo) swapTo = swapFrom; // auto-flip if same
+    swapFrom = coinId;
+    document.getElementById('fromEmoji').textContent = COIN_MAP[coinId].emoji;
+    document.getElementById('fromName').textContent  = COIN_MAP[coinId].name;
+  } else {
+    if (coinId === swapFrom) swapFrom = swapTo;
+    swapTo = coinId;
+    document.getElementById('toEmoji').textContent = COIN_MAP[coinId].emoji;
+    document.getElementById('toName').textContent  = COIN_MAP[coinId].name;
+  }
+  document.querySelectorAll('.coin-dropdown').forEach(d => d.classList.remove('open'));
+  openDropdown = null;
+  calcSwap();
+  loadBalances();
+}
+
+function getPrice(coinId) {
+  if (coinId === 'NENO') return 1;
+  return marketPrices[coinId] || 1;
+}
+
+function calcSwap() {
+  const fromAmt = parseFloat(document.getElementById('fromAmount')?.value || '0') || 0;
+  const fromPrice = getPrice(swapFrom);
+  const toPrice   = getPrice(swapTo);
+
+  // fromAmt in NENO value ÷ toPrice = toAmt
+  const neno = fromAmt * fromPrice;
+  const fee  = neno * 0.001;
+  const netNeno = neno - fee;
+  const toAmt = netNeno / toPrice;
+
+  const rate = fromPrice / toPrice;
+
+  // Update displays
+  const toAmtEl = document.getElementById('toAmount');
+  if (toAmtEl) toAmtEl.value = fromAmt > 0 ? toAmt.toFixed(6) : '';
+
+  const fromUsd = document.getElementById('fromUsdLabel');
+  if (fromUsd) fromUsd.textContent = `≈ ${neno.toFixed(4)} NENO`;
+
+  const toUsd = document.getElementById('toUsdLabel');
+  if (toUsd) toUsd.textContent = `≈ ${netNeno.toFixed(4)} NENO`;
+
+  // Rate display
+  const rateDisp = document.getElementById('swapRateDisplay');
+  if (rateDisp) rateDisp.textContent = `1 ${swapFrom} = ${rate.toFixed(6)} ${swapTo}`;
+
+  // Summary
+  const summaryPay = document.getElementById('summaryPay');
+  const summaryRcv = document.getElementById('summaryReceive');
+  const summaryRate= document.getElementById('summaryRate');
+  if (summaryPay) summaryPay.textContent = `${fromAmt} ${swapFrom}`;
+  if (summaryRcv) summaryRcv.textContent = `${toAmt.toFixed(6)} ${swapTo}`;
+  if (summaryRate) summaryRate.textContent = `1 ${swapFrom} = ${rate.toFixed(6)} ${swapTo}`;
+}
+
+async function loadBalances() {
+  if (!token) return;
+  try {
+    const r = await fetch('/api/trading/profile', {headers:{Authorization:`Bearer ${token}`}});
+    const d = await r.json();
+    if (d.ok && d.user && d.user.coins) {
+      userCoins = d.user.coins;
+      const fromBal = document.getElementById('fromBalance');
+      const toBal   = document.getElementById('toBalance');
+      if (fromBal) fromBal.textContent = `Balance: ${(userCoins[swapFrom] || 0).toLocaleString(undefined,{maximumFractionDigits:4})} ${swapFrom}`;
+      if (toBal)   toBal.textContent   = `Balance: ${(userCoins[swapTo]   || 0).toLocaleString(undefined,{maximumFractionDigits:4})} ${swapTo}`;
+    }
+  } catch(e) {}
+}
+
+function flipSwap() {
+  const tmp = swapFrom;
+  swapFrom  = swapTo;
+  swapTo    = tmp;
+
+  document.getElementById('fromEmoji').textContent = COIN_MAP[swapFrom].emoji;
+  document.getElementById('fromName').textContent  = COIN_MAP[swapFrom].name;
+  document.getElementById('toEmoji').textContent   = COIN_MAP[swapTo].emoji;
+  document.getElementById('toName').textContent    = COIN_MAP[swapTo].name;
+
+  // Animate button
+  const btn = document.getElementById('swapArrowBtn');
+  btn.classList.add('spinning');
+  setTimeout(() => btn.classList.remove('spinning'), 500);
+
+  calcSwap();
+  loadBalances();
+}
+
+async function executeSwap() {
+  if (!token) { showToast('Please login to swap coins', 'error'); return; }
+
+  const amount = parseFloat(document.getElementById('fromAmount')?.value || '0');
+  if (!amount || amount <= 0) { showToast('Enter a valid amount to swap', 'error'); return; }
+  if (swapFrom === swapTo) { showToast('Select different coins to swap', 'error'); return; }
+
+  const btn = document.getElementById('swapBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i data-lucide="loader-2"></i> Processing…';
+  lucide.createIcons();
+
+  try {
+    const r = await fetch('/api/trading/exchange', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({fromCoin: swapFrom, toCoin: swapTo, amount})
+    });
+    const d = await r.json();
+    if (d.ok) {
+      const toAmt = parseFloat(document.getElementById('toAmount')?.value || '0').toFixed(4);
+      showToast(`Swapped ${amount} ${swapFrom} → ${toAmt} ${swapTo} ✅`, 'success');
+      document.getElementById('fromAmount').value = '';
+      document.getElementById('toAmount').value   = '';
+      if (d.coins) userCoins = d.coins;
+      calcSwap();
+      loadBalances();
+    } else {
+      showToast(d.message || 'Swap failed', 'error');
+    }
+  } catch(e) {
+    showToast('Network error. Please try again.', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i data-lucide="repeat-2"></i> Swap Now';
+    lucide.createIcons();
+  }
+}
+
+/* ══════════════════════════════════════
+   UTILITIES
+══════════════════════════════════════ */
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+// Load balances if logged in
+if (token) loadBalances();
+</script>
+</body>
+</html>
