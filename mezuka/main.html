@@ -870,12 +870,12 @@ async function doSignup() {
     });
     const data = await r.json();
     if (data.ok) {
-      signupPendingEmail = email;
-      document.getElementById('signupForm').style.display = 'none';
-      document.getElementById('otpSection').style.display = 'flex';
-      document.getElementById('modalTitle').textContent = 'Verify Email';
-      document.getElementById('modalSub').textContent = `Enter the OTP sent to ${email}`;
-      showToast('Check your email for the OTP code!');
+      token = data.token; user = data.user;
+      localStorage.setItem('trading_token', token);
+      localStorage.setItem('trading_user', JSON.stringify(user));
+      closeAuthModal();
+      showToast('🎉 Welcome ' + data.user.username + '! 200 NENO coins added!');
+      checkLoginState();
     } else {
       showAuthErr('signup', data.error || 'Signup failed.');
     }
@@ -984,3 +984,4 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
+
