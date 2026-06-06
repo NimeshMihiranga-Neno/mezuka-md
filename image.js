@@ -4,7 +4,7 @@
 
 const IMAGES = { 
     // === Node.js Backend & WhatsApp Commands ===
-    DEFAULT_LOGO: 'https://files.catbox.moe/utbo8h.jpg',
+    DEFAULT_LOGO: 'https://raw.githubusercontent.com/NimeshMihiranga-Neno/Mezuka-help/main/IMG-20260606-WA0008(1).jpg',
     PAIR_IMG_ALTERNATIVE: 'https://files.catbox.moe/lt36jy.jpg',
     N8AN5Z: 'https://files.catbox.moe/e64mbj.jpg',
     IXYRRZ: 'https://files.catbox.moe/coik8f.jpg',
