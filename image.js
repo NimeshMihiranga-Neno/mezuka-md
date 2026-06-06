@@ -5,15 +5,15 @@
 const IMAGES = { 
     // === Node.js Backend & WhatsApp Commands ===
     DEFAULT_LOGO: 'https://raw.githubusercontent.com/NimeshMihiranga-Neno/Mezuka-help/main/IMG-20260606-WA0008(1).jpg',
-    PAIR_IMG_ALTERNATIVE: 'https://files.catbox.moe/lt36jy.jpg',
-    N8AN5Z: 'https://files.catbox.moe/e64mbj.jpg',
-    IXYRRZ: 'https://files.catbox.moe/coik8f.jpg',
-    AEEO1I: 'https://files.catbox.moe/aeeo1i.jpg',
-    FB_CMD: 'https://files.catbox.moe/eeonsq.jpg',
-    ADMIN_CMD: 'https://files.catbox.moe/45bks3.jpg',
-    OWNER_CMD: 'https://files.catbox.moe/6jcxqd.jpg', 
-    SCRAPPER_THUMB: 'https://files.catbox.moe/e64mbj.jpg',
-    IBB_LOGO: 'https://files.catbox.moe/coik8f.jpg',
+    PAIR_IMG_ALTERNATIVE: 'https://raw.githubusercontent.com/NimeshMihiranga-Neno/Mezuka-help/main/IMG-20260606-WA0008(1).jpg',
+    N8AN5Z: 'https://raw.githubusercontent.com/NimeshMihiranga-Neno/Mezuka-help/main/IMG-20260606-WA0008(1).jpg',
+    IXYRRZ: 'https://raw.githubusercontent.com/NimeshMihiranga-Neno/Mezuka-help/main/IMG-20260606-WA0008(1).jpg',
+    AEEO1I: 'https://raw.githubusercontent.com/NimeshMihiranga-Neno/Mezuka-help/main/IMG-20260606-WA0008(1).jpg',
+    FB_CMD: 'https://raw.githubusercontent.com/NimeshMihiranga-Neno/Mezuka-help/main/IMG-20260606-WA0008(1).jpg',
+    ADMIN_CMD: 'https://raw.githubusercontent.com/NimeshMihiranga-Neno/Mezuka-help/main/IMG-20260606-WA0008(1).jpg',
+    OWNER_CMD: 'https://raw.githubusercontent.com/NimeshMihiranga-Neno/Mezuka-help/main/IMG-20260606-WA0008(1).jpg', 
+    SCRAPPER_THUMB: 'https://raw.githubusercontent.com/NimeshMihiranga-Neno/Mezuka-help/main/IMG-20260606-WA0008(1).jpg',
+    IBB_LOGO: 'https://raw.githubusercontent.com/NimeshMihiranga-Neno/Mezuka-help/main/IMG-20260606-WA0008(1).jpg',
     
     // === HTML Frontend Web UI ===
     WEB_LOGO: 'https://files.catbox.moe/qhrzt2.jpg',
