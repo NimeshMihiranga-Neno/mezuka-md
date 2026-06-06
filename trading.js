@@ -227,43 +227,46 @@ router.post('/signup', async (req, res) => {
       return res.status(400).json({ ok: false, error: 'Email already registered. Please login.' });
     }
 
-    // Generate OTP
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    const otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
-
     const userData = {
       username: username.trim(),
       email: email.toLowerCase().trim(),
       password: hashPassword(password),
       whatsapp: whatsapp.trim(),
       profileImage: '',
-      verified: false,
-      otp,
-      otpExpiry,
-      coins: { NENO: 0, RED: 0, GREEN: 0, MEZUKA: 0, UP: 0, ROOT: 0 },
+      verified: true,
+      otp: null,
+      otpExpiry: null,
+      coins: { NENO: 200, RED: 0, GREEN: 0, MEZUKA: 0, UP: 0, ROOT: 0 },
       tradeHistory: [],
       createdAt: new Date()
     };
 
     if (existing && !existing.verified) {
-      // Update OTP for unverified user
       await col.updateOne(
         { email: email.toLowerCase() },
-        { $set: { otp, otpExpiry, username: username.trim(), password: hashPassword(password), whatsapp: whatsapp.trim() } }
+        { $set: { ...userData } }
       );
     } else {
       await col.insertOne(userData);
     }
 
-    // Send OTP email
-    try {
-      await sendOtpEmail(email, otp, username);
-    } catch (emailErr) {
-      console.error('OTP email failed:', emailErr.message);
-      // Still proceed - user can see the error
-    }
+    const newUser = await col.findOne({ email: email.toLowerCase() });
+    const token = signJWT({ userId: newUser._id.toString(), email: newUser.email });
 
-    res.json({ ok: true, message: `OTP sent to ${email}. Please verify to activate your account.` });
+    res.json({
+      ok: true,
+      token,
+      user: {
+        id: newUser._id,
+        username: newUser.username,
+        email: newUser.email,
+        whatsapp: newUser.whatsapp,
+        profileImage: newUser.profileImage,
+        coins: newUser.coins
+      },
+      message: '🎉 Account created! 200 NENO coins added to your wallet!'
+    });
+
   } catch (err) {
     console.error('Signup error:', err);
     res.status(500).json({ ok: false, error: err.message });
@@ -874,3 +877,4 @@ router.get('/tools/purchased', requireAuth, async (req, res) => {
 // EXPORT
 // ─────────────────────────────────────────────────────────────
 module.exports = router;
+
