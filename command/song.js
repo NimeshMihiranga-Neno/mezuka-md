@@ -22,7 +22,7 @@ module.exports = {
         ffmpeg.setFfmpegPath(ffmpegInstaller.path);
 
         // ── Custom API ──────────────────────────────────────────────
-        const YT_API = 'https://pacific-plains-35669-22457701905f.herokuapp.com';
+        const YT_API = 'https://youtube-scrap-ecru.vercel.app';
 
         const songQuery = args.join(" ").trim();
 
