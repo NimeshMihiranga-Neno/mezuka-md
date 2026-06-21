@@ -1,6 +1,6 @@
 // ============================================================
 // COMMAND: cartoon
-// MEZUKA MD V5 - command/cartoon.js
+// MEZUKA MD V4 - command/cartoon.js
 // ============================================================
 
 module.exports = {
@@ -10,10 +10,8 @@ module.exports = {
 
     try {
         const axios = require('axios');
-        const fs = require('fs');
-        const path = require('path');
 
-        const CARTOON_API = "https://cartoon-scrap.onrender.com";
+        const CARTOON_API = "https://cartoon-scrap.vercel.app";
         const LIST_BANNER = "https://raw.githubusercontent.com/NimeshMihiranga-Neno/Mezuka-help/main/c43aaa113275aa4f2ac0c9d10c603909.jpg";
         const NEWSLETTER = {
             newsletterJid: '120363424190766692@newsletter',
@@ -115,7 +113,7 @@ module.exports = {
                         `📖 *Story:*\n${cartoon.description?.substring(0, 300)}${cartoon.description?.length > 300 ? '...' : ''}\n\n` +
                         `━━━━━━━━━━━━━━━━━━━━\n` +
                         `📥 *Select a download option:*\n\n` +
-                        `*1 - 🎬 Direct Download (MP4)*\n` +
+                        `*1 - 📄 Direct Download (MP4 File)*\n` +
                         `*2 - 📱 Telegram Bot Link*\n\n` +
                         `_Reply with 1 or 2_ ⬆️`;
 
@@ -191,7 +189,7 @@ module.exports = {
                                     }, { quoted: dlMsg });
 
                                 } else {
-                                    // ===== Direct download =====
+                                    // ===== Direct download (URL → Document) =====
                                     if (!dlData.directLink) {
                                         return await conn.sendMessage(from, {
                                             text: `❌ Direct download link not available!\nTry option *2* (Telegram) instead.`
@@ -199,30 +197,12 @@ module.exports = {
                                     }
 
                                     await conn.sendMessage(from, {
-                                        text: `⬇️ *Downloading...*\n\n🎬 *${dlData.cartoon.title}*\n\nPlease wait, this may take a few minutes...`
+                                        text: `⬇️ *Sending file...*\n\n🎬 *${dlData.cartoon.title}*\n\nPlease wait...`
                                     }, { quoted: dlMsg });
 
-                                    const tempDir = path.join(__dirname, 'temp');
-                                    if (!fs.existsSync(tempDir)) fs.mkdirSync(tempDir, { recursive: true });
-
-                                    const unique = Date.now();
-                                    const videoPath = path.join(tempDir, `cartoon_${unique}.mp4`);
-
-                                    const videoRes = await axios.get(dlData.directLink.direct_url, {
-                                        responseType: 'arraybuffer',
-                                        timeout: 180000,
-                                        maxContentLength: Infinity,
-                                        maxBodyLength: Infinity,
-                                        headers: {
-                                            'Referer': 'https://sinhalacartoons.com/',
-                                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-                                        }
-                                    });
-
-                                    fs.writeFileSync(videoPath, Buffer.from(videoRes.data));
-
+                                    // ✅ URL directly send - no local download
                                     await conn.sendMessage(from, {
-                                        video: fs.readFileSync(videoPath),
+                                        document: { url: dlData.directLink.direct_url },
                                         mimetype: 'video/mp4',
                                         fileName: `${dlData.cartoon.title}.mp4`,
                                         caption:
@@ -234,8 +214,6 @@ module.exports = {
                                             forwardedNewsletterMessageInfo: NEWSLETTER
                                         }
                                     }, { quoted: dlMsg });
-
-                                    try { fs.unlinkSync(videoPath); } catch {}
 
                                     await conn.sendMessage(from, {
                                         react: { text: '✅', key: mek.key }
@@ -271,7 +249,7 @@ module.exports = {
     } catch (e) {
         console.error('Cartoon command error:', e);
         await conn.sendMessage(from, { react: { text: '❌', key: mek.key } });
-        reply(`❌ *Error!*\n\n${e.message || 'Please try again later.'}`);
+        reply(`❌ *Error!*\n\nPlease try again later.`);
     }
 
     }
