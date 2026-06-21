@@ -19,7 +19,7 @@ module.exports = {
         ffmpeg.setFfmpegPath(ffmpegPath);
 
         // ── Custom API ──────────────────────────────────────────────
-        const YT_API = 'https://pacific-plains-35669-22457701905f.herokuapp.com';
+        const YT_API = 'https://youtube-scrap-ecru.vercel.app';
 
         // ── Usage check ─────────────────────────────────────────────
         if (!args || args.length < 2) {
