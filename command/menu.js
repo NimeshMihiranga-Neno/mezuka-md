@@ -41,6 +41,11 @@ try {
             { cmd: 'fb',       emoji: '📘', desc_si: 'Facebook Video බාගන්නට',   desc_en: 'Download Facebook video',      ex_si: 'fb [link]',       ex_en: 'fb [link]' },
             { cmd: 'gdrive',   emoji: '☁️', desc_si: 'Google Drive File බාගන්නට', desc_en: 'Download Google Drive file',  ex_si: 'gdrive [link]',   ex_en: 'gdrive [link]' },
             { cmd: 'ig',       emoji: '📸', desc_si: 'Instagram Video බාගන්නට',  desc_en: 'Download Instagram video',     ex_si: 'ig [link]',       ex_en: 'ig [link]' },
+            { cmd: 'movie',    emoji: '🎟️', desc_si: 'movie බාගන්නට',  desc_en: 'Download movie sinhalasubs',     ex_si: 'movie [name]',       ex_en: 'movie [name]' },
+            { cmd: 'cartoon',       emoji: '🧃', desc_si: 'cartoon බාගන්නට',  desc_en: 'Download cartoon',     ex_si: 'cartoon',       ex_en: 'cartoon' },
+
+
+
         ],
         CONVERT: [
             { cmd: 'sticker',  emoji: '🖼️', desc_si: 'Image එකක් Sticker එකක් කිරීමට',    desc_en: 'Convert image to sticker',         ex_si: 'sticker (image reply)',  ex_en: 'sticker (reply to image)' },
