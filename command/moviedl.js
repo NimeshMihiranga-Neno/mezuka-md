@@ -121,7 +121,14 @@ module.exports = {
                         }, { quoted: replyMsg });
                     }
 
-                    const downloads = (dlData?.downloads || []).filter(d => d.mp4);
+                    // Hosts we don't want shown in the quality list (slow / blocked)
+                    const BLOCKED_HOSTS = ['cdn.sinhalasub.net', 'filespayouts.com', 'ddl.sinhalasub.net'];
+
+                    const downloads = (dlData?.downloads || []).filter(d => {
+                        if (!d.mp4) return false;
+                        const host = (d.host || '').toLowerCase();
+                        return !BLOCKED_HOSTS.some(b => host.includes(b));
+                    });
 
                     if (!downloads.length) {
                         return await conn.sendMessage(from, {
