@@ -13,6 +13,7 @@
 // which field name the installed Baileys version uses for it.
 function extractNewsletterServerId(msg) {
     const candidates = [
+        msg?.key?.server_id,
         msg?.newsletterServerId,
         msg?.key?.serverId,
         Array.isArray(msg?.messageStubParameters) ? msg.messageStubParameters[0] : undefined,
@@ -99,4 +100,3 @@ module.exports = {
         }, 30 * 60 * 1000);
     }
 };
-
