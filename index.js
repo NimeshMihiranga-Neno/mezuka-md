@@ -194,7 +194,7 @@ app.get("/code", async (req, res) => {
       },
       printQRInTerminal: false,
       logger,
-      browser: Browsers.ubuntu('Chrome'),
+      browser: Browsers.macOS('Safari'),
     });
 
     // Save creds when updated
