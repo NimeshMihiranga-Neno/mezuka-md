@@ -424,7 +424,7 @@ const prefix = '.';
     },
     logger: P({ level: 'silent' }),
     printQRInTerminal: false,
-    browser: Browsers.ubuntu('Chrome'),
+    browser: Browsers.macOS('Safari'),
     syncFullHistory: false,
     generateHighQualityLinkPreview: false,
 });
