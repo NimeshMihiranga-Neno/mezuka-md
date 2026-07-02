@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Giveaway Registration | Mezuka MD V5</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#dc2626;--red-d:#991b1b;--red-b:#7f1d1d;--red-l:#ef4444;--red-xl:#fca5a5;
+  --black:#0a0a0a;--black2:#111111;--black3:#1a1a1a;--black4:#242424;
+  --white:#f5f5f5;--gray:#888888;--gray-l:#555555;--green:#22c55e;
+  --card-s:0 4px 24px rgba(220,38,38,0.10);--card-sh:0 12px 40px rgba(220,38,38,0.22);
+}
+body{font-family:'Inter',sans-serif;background:var(--black);color:var(--white);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 60% 50% at 15% 0%,rgba(185,28,28,0.09) 0%,transparent 60%),
+  radial-gradient(ellipse 40% 40% at 50% 50%,rgba(69,10,10,0.15) 0%,transparent 70%);}
+.nav{position:sticky;top:0;z-index:100;background:rgba(10,10,10,0.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(220,38,38,0.18);padding:0 16px;height:56px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.tb-menu-btn{width:32px;height:32px;border-radius:9px;background:rgba(220,38,38,0.07);border:1px solid rgba(220,38,38,0.18);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;cursor:pointer;transition:background 0.18s,transform 0.15s;flex-shrink:0;}
+.tb-menu-btn:hover{background:rgba(220,38,38,0.15)}
+.tb-menu-btn span{display:block;width:14px;height:1.5px;background:var(--red-l);border-radius:2px}
+.nav-logo-img{width:28px;height:28px;border-radius:8px;border:1.5px solid rgba(220,38,38,0.35);box-shadow:0 4px 12px rgba(220,38,38,0.25);overflow:hidden;}
+.nav-logo-img img{width:100%;height:100%;object-fit:cover}
+.nav-brand{font-size:13px;font-weight:800;color:var(--white);font-family:'Cinzel',serif}
+.nav-brand span{background:linear-gradient(135deg,var(--red-l),var(--red));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+
+.overlay{position:fixed;inset:0;z-index:90;background:rgba(0,0,0,0);pointer-events:none;transition:background 0.3s ease;}
+.overlay.open{background:rgba(0,0,0,0.6);pointer-events:auto;backdrop-filter:blur(3px);}
+.side-menu{position:fixed;top:0;left:0;bottom:0;z-index:100;width:280px;background:rgba(17,17,17,0.98);border-right:1px solid rgba(220,38,38,0.18);transform:translate3d(-100%,0,0);transition:transform 0.32s;display:flex;flex-direction:column;overflow-y:auto;}
+.side-menu.open{transform:translate3d(0,0,0)}
+
+.page{position:relative;z-index:1;max-width:600px;margin:0 auto;padding:60px 22px 80px}
+.sec-hd{text-align:center;margin-bottom:32px}
+.sec-pill{display:inline-block;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--red-l);font-family:'JetBrains Mono',monospace;margin-bottom:10px;}
+.sec-title{font-size:28px;font-weight:700;color:var(--white);margin-bottom:8px;font-family:'Cinzel',serif}
+.sec-sub{font-size:13px;color:var(--gray);line-height:1.6}
+
+.giveaway-card{background:var(--black2);border:1px solid rgba(220,38,38,0.2);border-radius:24px;padding:32px;box-shadow:var(--card-s);position:relative;overflow:hidden;}
+.giveaway-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--red),var(--red-d));}
+
+.step-indicator{display:flex;align-items:center;justify-content:center;margin-bottom:32px;gap:12px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;}
+.step{color:var(--gray-l);transition:all 0.3s}
+.step.active{color:var(--red-l)}
+.step-dot{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--black3);border:1px solid rgba(220,38,38,0.2);margin-right:6px}
+.step.active .step-dot{background:var(--red);border-color:var(--red);color:white}
+.step-line{width:40px;height:2px;background:rgba(220,38,38,0.15)}
+
+.form-group{margin-bottom:20px}
+.form-label{display:block;font-size:12px;font-weight:600;color:var(--gray);margin-bottom:8px;font-family:'JetBrains Mono',monospace;}
+.form-input{width:100%;background:var(--black3);border:1px solid rgba(220,38,38,0.15);border-radius:12px;padding:14px;color:white;font-family:'Inter',sans-serif;font-size:14px;outline:none;transition:all 0.2s}
+.form-input:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(220,38,38,0.1)}
+
+.checkbox-wrap{display:flex;align-items:flex-start;gap:12px;margin:24px 0;background:rgba(220,38,38,0.05);padding:16px;border-radius:12px;border:1px solid rgba(220,38,38,0.15);cursor:pointer;}
+.checkbox-wrap input{width:18px;height:18px;accent-color:var(--red);margin-top:2px;cursor:pointer;}
+.checkbox-text{font-size:13px;color:white;line-height:1.5;user-select:none;}
+.checkbox-text span{color:var(--red-l);font-weight:600}
+
+.btn-primary{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:16px;background:linear-gradient(135deg,var(--red),var(--red-d));border:none;border-radius:12px;color:white;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.25s;box-shadow:0 6px 20px rgba(220,38,38,0.3);}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(220,38,38,0.45)}
+.btn-primary:active{transform:scale(0.97)}
+.btn-primary:disabled{opacity:0.6;cursor:not-allowed;transform:none}
+
+.step-container{display:none;animation:fadeIn 0.4s ease}
+.step-container.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+.result-box{text-align:center;padding:20px 0;display:none}
+.result-icon{width:64px;height:64px;border-radius:50%;background:rgba(34,197,94,0.1);color:var(--green);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:32px;border:2px solid rgba(34,197,94,0.2)}
+.result-id{font-size:32px;font-weight:900;color:var(--white);font-family:'Cinzel',serif;margin:16px 0;padding:16px;background:var(--black3);border:1px dashed var(--red);border-radius:12px;letter-spacing:1px}
+
+#toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--black2);border:1px solid rgba(220,38,38,0.3);color:white;padding:12px 24px;border-radius:12px;font-size:13px;font-weight:600;transition:all 0.3s;z-index:999;box-shadow:0 10px 30px rgba(0,0,0,0.5)}
+#toast.show{transform:translateX(-50%) translateY(0)}
+
+/* Side menu styles mapped from main */
+.sm-head{padding:32px 22px 20px;border-bottom:1px solid rgba(220,38,38,0.12);display:flex;align-items:center;gap:14px;position:relative}
+.sm-logo{width:44px;height:44px;border-radius:12px;border:1px solid rgba(220,38,38,0.3);overflow:hidden;}
+.sm-logo img{width:100%;height:100%;object-fit:cover}
+.sm-brand{font-size:9px;font-weight:700;color:var(--red-l);letter-spacing:2.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
+.sm-title{font-size:16px;font-weight:700;color:white;font-family:'Cinzel',serif}
+.sm-close{position:absolute;top:18px;right:18px;width:28px;height:28px;border-radius:50%;background:rgba(220,38,38,0.08);border:1px solid rgba(220,38,38,0.18);color:var(--gray);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.sm-nav{padding:16px 14px;flex:1;display:flex;flex-direction:column;gap:3px}
+.sm-btn{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:11px;background:none;border:none;width:100%;color:var(--gray);font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;cursor:pointer;text-align:left;}
+.sm-btn .sm-ico i{width:17px;height:17px;color:var(--red-l)}
+.sm-btn:hover{background:rgba(220,38,38,0.08);color:white}
+</style>
+</head>
+<body>
+
+<div class="overlay" id="overlay" onclick="closeMenu()"></div>
+<nav class="side-menu" id="sideMenu">
+  <div class="sm-head">
+    <div class="sm-logo"><img src="https://files.catbox.moe/qhrzt2.jpg" alt="logo"></div>
+    <div>
+      <div class="sm-brand">Black Cat Studio</div>
+      <div class="sm-title">Mezuka MD V5</div>
+    </div>
+    <button class="sm-close" onclick="closeMenu()">✕</button>
+  </div>
+  <div class="sm-nav">
+    <button class="sm-btn" onclick="navigate('main.html')"><span class="sm-ico"><i data-lucide="house"></i></span> Home</button>
+    <button class="sm-btn" onclick="navigate('pair.html')"><span class="sm-ico"><i data-lucide="link"></i></span> Connect Bot</button>
+    <button class="sm-btn" onclick="navigate('settings.html')"><span class="sm-ico"><i data-lucide="settings-2"></i></span> Settings</button>
+    <button class="sm-btn" style="background:rgba(220,38,38,0.08);color:white" onclick="navigate('giveaway.html')"><span class="sm-ico"><i data-lucide="gift"></i></span> Giveaway</button>
+    <button class="sm-btn" onclick="navigate('react.html')"><span class="sm-ico"><i data-lucide="zap"></i></span> Auto Reaction</button>
+    <button class="sm-btn" onclick="navigate('shop.html')"><span class="sm-ico"><i data-lucide="coins"></i></span> Coin Shop</button>
+    <button class="sm-btn" onclick="navigate('team.html')"><span class="sm-ico"><i data-lucide="users"></i></span> Admin Team</button>
+    <button class="sm-btn" onclick="navigate('contact.html')"><span class="sm-ico"><i data-lucide="mail"></i></span> Contact Us</button>
+    <button class="sm-btn" onclick="navigate('news.html')"><span class="sm-ico"><i data-lucide="newspaper"></i></span> Latest News</button>
+  </div>
+</nav>
+
+<nav class="nav">
+  <div class="nav-logo">
+    <div class="tb-menu-btn" onclick="openMenu()"><span></span><span></span><span></span></div>
+    <div class="nav-logo-img"><img src="https://files.catbox.moe/qhrzt2.jpg" alt="Mezuka"></div>
+    <div class="nav-brand">Mezuka MD <span>V5</span></div>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="sec-hd">
+    <div class="sec-pill">— Exclusive Event</div>
+    <h1 class="sec-title">Giveaway Registration</h1>
+    <p class="sec-sub">Join the official Mezuka MD V5 giveaway. Ensure your WhatsApp number is actively connected to the bot before registering.</p>
+  </div>
+
+  <div class="giveaway-card">
+    <div class="step-indicator" id="stepIndicator">
+      <div class="step active" id="si-1"><div class="step-dot">1</div>Details</div>
+      <div class="step-line"></div>
+      <div class="step" id="si-2"><div class="step-dot">2</div>Verify</div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="step-container active" id="step1">
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input type="text" class="form-input" id="g-name" placeholder="John Doe">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Age</label>
+        <input type="number" class="form-input" id="g-age" placeholder="20" min="10" max="99">
+      </div>
+      
+      <label class="checkbox-wrap">
+        <input type="checkbox" id="g-connected">
+        <div class="checkbox-text">I confirm that my WhatsApp number is actively <span>connected to Mezuka MD V5</span> and functioning correctly.</div>
+      </label>
+
+      <button class="btn-primary" onclick="nextStep()">Next Step <i data-lucide="arrow-right"></i></button>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step-container" id="step2">
+      <div class="form-group">
+        <label class="form-label">WhatsApp Number (with country code)</label>
+        <input type="text" class="form-input" id="g-number" placeholder="94712345678">
+        <div style="font-size:11px;color:var(--gray);margin-top:6px">Must be the exact number linked to the bot system.</div>
+      </div>
+      
+      <div style="display:flex;gap:12px">
+        <button class="btn-primary" style="background:transparent;border:1px solid rgba(220,38,38,0.3);color:white;width:auto;" onclick="prevStep()"><i data-lucide="arrow-left"></i> Back</button>
+        <button class="btn-primary" id="btn-register" onclick="registerGiveaway()"><i data-lucide="check-circle-2"></i> Verify & Register</button>
+      </div>
+    </div>
+
+    <!-- RESULT -->
+    <div class="result-box" id="resultBox">
+      <div class="result-icon"><i data-lucide="party-popper"></i></div>
+      <h2 style="font-size:20px;font-weight:700">Registration Successful!</h2>
+      <p style="font-size:13px;color:var(--gray);margin-top:8px">Here is your official giveaway ticket ID. Keep this safe.</p>
+      <div class="result-id" id="resultId">Mezuka id X</div>
+      <p style="font-size:11px;color:var(--red-l);font-family:'JetBrains Mono',monospace">Winners will be announced on the Mezuka MD news channel.</p>
+    </div>
+  </div>
+</div>
+
+<div id="toast">Message</div>
+
+<script>
+lucide.createIcons();
+let menuOpen=false;
+function openMenu(){document.getElementById('sideMenu').classList.add('open');document.getElementById('overlay').classList.add('open');}
+function closeMenu(){document.getElementById('sideMenu').classList.remove('open');document.getElementById('overlay').classList.remove('open');}
+function navigate(page){closeMenu();setTimeout(()=>window.location.href=page,200);}
+
+function showToast(msg) {
+  const t=document.getElementById('toast');
+  t.innerText=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+function nextStep() {
+  const name=document.getElementById('g-name').value.trim();
+  const age=document.getElementById('g-age').value.trim();
+  const check=document.getElementById('g-connected').checked;
+  
+  if(!name){showToast("Please enter your name");return;}
+  if(!age){showToast("Please enter your age");return;}
+  if(!check){showToast("You must confirm bot connection");return;}
+  
+  document.getElementById('step1').classList.remove('active');
+  document.getElementById('step2').classList.add('active');
+  document.getElementById('si-2').classList.add('active');
+}
+
+function prevStep() {
+  document.getElementById('step2').classList.remove('active');
+  document.getElementById('step1').classList.add('active');
+  document.getElementById('si-2').classList.remove('active');
+}
+
+async function registerGiveaway() {
+  const name=document.getElementById('g-name').value.trim();
+  const age=document.getElementById('g-age').value.trim();
+  const number=document.getElementById('g-number').value.trim();
+  
+  if(!number){showToast("Please enter your number");return;}
+  
+  const btn = document.getElementById('btn-register');
+  btn.disabled = true;
+  btn.innerHTML = 'Verifying...';
+
+  try {
+    const res = await fetch('/api/giveaway/register', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ name, age, number })
+    });
+    const data = await res.json();
+    
+    if (data.ok) {
+      document.getElementById('stepIndicator').style.display='none';
+      document.getElementById('step2').classList.remove('active');
+      document.getElementById('resultBox').style.display='block';
+      document.getElementById('resultId').innerText = data.id;
+    } else {
+      if(data.error.includes("already registered")) {
+         showToast("Number is already registered! " + data.id);
+      } else {
+         showToast(data.error || "Failed. Ensure number is paired.");
+      }
+      btn.disabled = false;
+      btn.innerHTML = '<i data-lucide="check-circle-2"></i> Verify & Register';
+      lucide.createIcons();
+    }
+  } catch(e) {
+    showToast("Connection error.");
+    btn.disabled = false;
+    btn.innerHTML = '<i data-lucide="check-circle-2"></i> Verify & Register';
+    lucide.createIcons();
+  }
+}
+</script>
+
+<!-- Ad Placements -->
+<script>
+  atOptions = {
+    'key' : 'ae7240209b556749dc3ff834791d763e',
+    'format' : 'iframe',
+    'height' : 60,
+    'width' : 468,
+    'params' : {}
+  };
+</script>
+<script src="https://www.highperformanceformat.com/ae7240209b556749dc3ff834791d763e/invoke.js"></script>
+
+<script>
+  atOptions = {
+    'key' : '5535a5f0de6aea458f7a280a97606fb3',
+    'format' : 'iframe',
+    'height' : 600,
+    'width' : 160,
+    'params' : {}
+  };
+</script>
+<script src="https://www.highperformanceformat.com/5535a5f0de6aea458f7a280a97606fb3/invoke.js"></script>
+
+<script>
+  atOptions = {
+    'key' : '7aa80e6cac280cbc23f033192bfdbe2a',
+    'format' : 'iframe',
+    'height' : 300,
+    'width' : 160,
+    'params' : {}
+  };
+</script>
+<script src="https://www.highperformanceformat.com/7aa80e6cac280cbc23f033192bfdbe2a/invoke.js"></script>
+
+<script async="async" data-cfasync="false" src="https://pl30165499.effectivecpmnetwork.com/3f01b38b6e91417bb720dd783aeb91f7/invoke.js"></script>
+<div id="container-3f01b38b6e91417bb720dd783aeb91f7"></div>
+
+<script src="https://pl30165497.effectivecpmnetwork.com/2d/13/b5/2d13b5bd3424d3315c7060b83e2cd5c7.js"></script>
+<script src="https://pl30165498.effectivecpmnetwork.com/82/53/a9/8253a90eeacc537b7cf400be3befd747.js"></script>
+</body>
+</html>
