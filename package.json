@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node --max-old-space-size=460 index.js",
     "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "heroku-postbuild": "npm rebuild sharp --update-binary"
   },
   "keywords": [
     "whatsapp",
@@ -36,11 +37,11 @@
     "node-fetch": "^2.7.0",
     "pino": "^9.6.0",
     "qrcode-terminal": "^0.12.0",
+    "sharp": "^0.33.5",
     "wa-sticker-formatter": "^4.4.4",
     "yt-search": "^2.10.4",
     "dotenv": "^16.0.0",
-    "@ffmpeg-installer/ffmpeg": "^1.1.0",
-    "sharp": "^0.33.5"
+    "@ffmpeg-installer/ffmpeg": "^1.1.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"
